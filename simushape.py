@@ -173,9 +173,6 @@ def optimize(data):
 
 
 
-#####
-# ARGPARSE
-#####
 
 if __name__=='__main__':
 
@@ -193,6 +190,6 @@ if __name__=='__main__':
     targets ={a:[b,c] for (a,b,c) in read_dbn(args.target)}
     result = {}
     dump_shape(result,args.output)
-    for target in targets:
-        result[target] = predict2(model,*targets[target])
-    optimize(data)
+    #for target in targets:
+    #    result[target] = predict2(model,*targets[target])
+    #optimize(data)
