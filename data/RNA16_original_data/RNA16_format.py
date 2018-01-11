@@ -3,9 +3,9 @@
 #####
 import argparse
 parser = argparse.ArgumentParser(description='shape annotation')
-parser.add_argument('--bpseq',  type=str, nargs=1, default='BPseq', help='path to folder containing .bpseq files')
-parser.add_argument('--seq',  type=str, nargs=1, default='seq', help='path to folder containing .seq files')
-parser.add_argument('--shape',  type=str, nargs=1, default='shape', help='path to folder containing .shape files ')
+parser.add_argument('--bpseq',  type=str, default='BPseq', help='path to folder containing .bpseq files')
+parser.add_argument('--seq',  type=str,  default='seq', help='path to folder containing .seq files')
+parser.add_argument('--shape',  type=str, default='shape', help='path to folder containing .shape files ')
 args = parser.parse_args()
 
 DEBUG = True
