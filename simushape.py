@@ -198,6 +198,14 @@ from sklearn.model_selection import RandomizedSearchCV as rsearch
 from scipy.stats import randint as rint
 from sklearn.ensemble import RandomForestRegressor
 
+def quickladdata():
+    ok = ['ADDRSW', 'ZHCV', 'Z-CIDGMP-1', '23sRNA', 'p564', 'srRNA', 'MDLOOP', 'R009', 'TRP5']
+    data = get_all_data('data/RNA16.react','data/RNA16.dbn')
+    for k in data:
+        if k not in ok:
+            data.pop(k)
+    return data
+
 def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
     model = RandomForestRegressor()
     param_dist = {'n_estimators': rint(10, 30),
