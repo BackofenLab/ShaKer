@@ -201,7 +201,7 @@ from sklearn.ensemble import RandomForestRegressor
 def quickladdata():
     ok = ['ADDRSW', 'ZHCV', 'Z-CIDGMP-1', '23sRNA', 'p564', 'srRNA', 'MDLOOP', 'R009', 'TRP5']
     data = get_all_data('data/RNA16.react','data/RNA16.dbn')
-    for k in data:
+    for k in data.keys():
         if k not in ok:
             data.pop(k)
     return data
@@ -219,7 +219,7 @@ def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
                   "oob_score": [False, True]}
 
     X,y = getXY(data,data.keys(),r,d)
-    blu = rsearch(model, param_distributions=param_dist, n_iter=10,n_jobs=1)
+    blu = rsearch(model, param_distributions=param_dist, n_iter=n_iter,n_jobs=n_jobs)
     blu.fit(X, y)
     print blu.best_params_
 
