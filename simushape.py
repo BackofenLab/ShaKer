@@ -74,15 +74,20 @@ from scipy.sparse import vstack
 from sklearn.linear_model import SGDRegressor
 import numpy as np
 
-from sklearn.ensemble import RandomForestRegressor as regressor
+from sklearn.ensemble import RandomForestRegressor
 def mask(x,y):
     mask = np.array([ i for i,e in enumerate(y) if e!=-999.0])
     y=y[mask]
     x=x[mask]
     return x,y
 
-def make_model(data,sequence_names=[], DEBUG=False,r=0,d=2):
-    graphs =  [ eden_rna.sequence_dotbracket_to_graph(*data[key][1:]) for key in sequence_names]
+
+
+def make_graphs(data, good_keys):
+    return  [ eden_rna.sequence_dotbracket_to_graph(*data[key][1:]) for key in good_keys]
+
+def getXY(data,good_keys,r,d,DEBUG=False):
+    graphs =  make_graphs(data,good_keys)
     x = vstack( eg.vertex_vectorize(graphs,r=r,d=d) )
 
     if DEBUG:
@@ -91,16 +96,18 @@ def make_model(data,sequence_names=[], DEBUG=False,r=0,d=2):
         nodecount = [len(g) for g in graphs]
         print nodecount, "sum", sum(nodecount)
 
-    y = [f for key in sequence_names for f in data[key][0]]
+    y = [f for key in good_keys for f in data[key][0]]
     if DEBUG:
         print "found this many y values:", len(y)
-
     # filter x and y
     y=np.array(y)
     x,y= mask(x,y)
     if DEBUG:
         print "x,y after filtering",x.shape, y.shape
-    model=regressor()
+    return x,y
+
+def make_model(data,sequence_names=[], DEBUG=False,r=0,d=2,model=RandomForestRegressor()):
+    x,y = getXY(data,sequence_names,r,d,DEBUG=DEBUG)
     model.fit(x,y)
     return model
 
@@ -140,37 +147,73 @@ def dump_shape(result, fname):
 ##########
 # OPTIMIZE
 ##########
+
+
 def remove(li, it):
     li2 = list(li)
     li2.remove(it)
     return li2
 
-
 from scipy.stats import spearmanr as corr
-def calc(names,data, item,r,d):
-    model = make_model(data,names,False,r,d)
+def calc(names,data, item,r,d,model=RandomForestRegressor()):
+    model = make_model(data,names,False,r,d, model)
     graph = eden_rna.sequence_dotbracket_to_graph(data[item][1],data[item][2])
     res = np.array(predict(model,graph))
     other = np.array(data[item][0])
 
-
-
     res,other = mask(res,other)
     value =  corr(res,other)[0]
-    print '\t',len(data[item][1]),"\t", value
+    #print '\t',len(data[item][1]),"\t", value
     return value
 
-def optimize(data):
+import multiprocessing as mp
+def funmap(f,args):
+    pool=mp.Pool(10)
+    res=pool.map(f,args)
+    pool.close()
+    return res
+#------
+# EDEN
+
+
+def opti_eden(data,r,d):
+    names= data.keys()
+    res= [ calc( remove(names,item), data , item,r,d) for item in names ]
+    mederror= np.array(res).mean()
+    print "r=%d d=%d res=%.2f\n\n" % (r,d, mederror)
+
+def optimize_eden_multi(data, jobs=4):
+    funmap(opti_eden,[(data,r,d) for r in range(5) for d in range(5)])
+
+
+def optimize_eden_serial(data):
+    # data is now  a dict name -> (react,sequence,dotbacket)
     for r in range(0,5):
         for d in range(0,5):
-            # data is now  a dict name -> (react,sequence,dotbacket)
-            names= data.keys()
-            res= [ calc( remove(names,item), data , item,r,d) for item in names ]
-            mederror= np.array(res).mean()
-            print "r=%d d=%d res=%.2f\n\n" % (r,d, mederror)
+            opti_eden(data,r,d)
 
 
 
+from sklearn.model_selection import RandomizedSearchCV as rsearch
+from scipy.stats import randint as rint
+from sklearn.ensemble import RandomForestRegressor
+
+def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
+    model = RandomForestRegressor()
+    param_dist = {'n_estimators': rint(10, 30),
+                  # 'criterion': ['mse','mae'],  # not in 0.18 but in 0.19
+                  'min_samples_split': rint(2, 10),
+                  'min_samples_leaf': rint(1, 5),
+                  'min_weight_fraction_leaf': [0.0, 0.01, 0.05],
+                  'max_features': [None, 'log2', 'sqrt', 'log2'],
+                  'min_impurity_split': [0.0, 0.0, 0.01, 0.05],  # min_impurity_decrease
+                  "bootstrap": [True],  # false conflicts with oob score thing
+                  "oob_score": [False, True]}
+
+    X,y = getXY(data,data.keys(),r,d)
+    blu = rsearch(model, param_distributions=param_dist, n_iter=10,n_jobs=1)
+    blu.fit(X, y)
+    print blu.best_params_
 
 
 
