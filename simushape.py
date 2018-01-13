@@ -222,6 +222,7 @@ def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
     blu = rsearch(model, param_distributions=param_dist, n_iter=n_iter,n_jobs=n_jobs)
     blu.fit(X, y)
     print blu.best_params_
+    print blu.best_score_
 
 
 
