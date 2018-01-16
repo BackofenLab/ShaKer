@@ -106,7 +106,21 @@ def getXY(data,good_keys,r,d,DEBUG=False):
         print "x,y after filtering",x.shape, y.shape
     return x,y
 
-def make_model(data,sequence_names=[], DEBUG=False,r=0,d=2,model=RandomForestRegressor()):
+
+
+def make_model(data,sequence_names=[],
+               DEBUG=False,
+               r=0,
+               d=2,
+               model=RandomForestRegressor(**{'oob_score': False,
+                                              'min_impurity_split': 0.01,
+                                              'bootstrap': True,
+                                              'min_samples_leaf': 1,
+                                              'n_estimators': 16,
+                                              'min_samples_split': 6,
+                                              'min_weight_fraction_leaf': 0.02,
+                                              'max_features': None})):
+
     x,y = getXY(data,sequence_names,r,d,DEBUG=DEBUG)
     model.fit(x,y)
     return model
