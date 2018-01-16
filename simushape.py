@@ -208,13 +208,13 @@ def quickladdata():
 
 def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
     model = RandomForestRegressor()
-    param_dist = {'n_estimators': rint(10, 30),
+    param_dist = {'n_estimators': rint(15, 30),
                   # 'criterion': ['mse','mae'],  # not in 0.18 but in 0.19
                   'min_samples_split': rint(2, 10),
                   'min_samples_leaf': rint(1, 5),
-                  'min_weight_fraction_leaf': [0.0, 0.01, 0.05],
-                  'max_features': [None, 'log2', 'sqrt', 'log2'],
-                  'min_impurity_split': [0.0, 0.0, 0.01, 0.05],  # min_impurity_decrease
+                  'min_weight_fraction_leaf': [0.02],# opti said this is good
+                  'max_features': [None], # None is best
+                  'min_impurity_split': [0.03, 0.02, 0.01, 0.04],  # min_impurity_decrease
                   "bootstrap": [True],  # false conflicts with oob score thing
                   "oob_score": [False, True]}
 
