@@ -61,7 +61,7 @@ def dump_shape(result, fname):
 
 
 #######
-# generate data and learn model
+# generate data _  struct given
 ########
 
 import eden_rna
@@ -125,7 +125,7 @@ def make_model(data,sequence_names=[],
 
 
 ##############
-# PREDICT
+# PREDICT          _ struct given
 #############
 
 def predict2(model,seq,stru):
@@ -135,7 +135,6 @@ def predict2(model,seq,stru):
 def predict(model,graph):
     #graph = eden_rna.sequence_dotbracket_to_graph(seq,stru)
     return model.predict(eg.vertex_vectorize([graph])[0])
-
 
 
 
