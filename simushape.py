@@ -103,8 +103,8 @@ def getXY(data,good_keys,r,d,DEBUG=False):
 
 def make_model(data,sequence_names=[],
                DEBUG=False,
-               r=0,
-               d=2,
+               r=3,
+               d=3,
                model=RandomForestRegressor(**{'oob_score': False,
                                               'min_impurity_split': 0.01,
                                               'bootstrap': True,

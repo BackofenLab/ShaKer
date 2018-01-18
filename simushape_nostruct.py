@@ -78,8 +78,8 @@ def predict(model, sequence):
     vecs = eden.graph.vertex_vectorize(graphs,r=3,d=3)
     res= [ model.predict(blob) for blob in vecs ]
     res = np.vstack(res)
-    return res.mean(axis=0)
-
+    #return res.mean(axis=0)
+    return np.median(res,axis=0)
 
 
 
