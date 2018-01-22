@@ -54,7 +54,7 @@ def dump_shape(shape,fname):
     print shape
     fnames = [ e[:e.find(".")] for e in fname ]
     fix_data = lambda x: "\n".join([ str(i+1)+"\t"+e.strip() for i,e in enumerate( x.split("\n") ) if e.strip()>0  ])
-    dataz = map(fix_data, shape)
+    dataz = shape #map(fix_data, shape)
     textlist = [">%s\n%s\n\n" % (name,data)  for (name,data) in zip(fnames,dataz)]
     res = ''.join(textlist)
     dump("data.react",res)
