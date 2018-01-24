@@ -33,12 +33,15 @@ def shape(sequence):
     if retcode != 0:
         print "RNAshapes failed"
         return
-    return [ a.strip() for a in re.findall(r' [.()]+ ',out) ]
+
+    energy = re.findall(r"[-+]?[0-9]*\.?[0-9]+",out)
+    shape =[ a.strip() for a in re.findall(r' [.()]+ ',out) ]
+    return shape, energy
 
 
-def getgraphs(sequences, react):
+def getgraphs(sequences, react,maxstructs=3):
    for seq,r in zip(sequences,react):
-       for stru in shape(seq):
+       for stru in shape(seq)[0][:maxstructs]: # MAXIMUM structures looked at
            graph=  eden_rna.sequence_dotbracket_to_graph(seq,stru)
            graph.graph['rea']=r
            yield graph
@@ -49,7 +52,7 @@ def getgraphs(sequences, react):
 def getXY(data,keys):
     # data is  name -> (react,sequence,dotbacket)
     # we first make some graphs
-    graphs = list(getgraphs([data[k][1] for k in keys], [data[k][0] for k in keys ]))
+    graphs = list(getgraphs([data[k][1] for k in keys], [data[k][0] for k in keys ], maxstructs=3))
 
     # then we edenize
     x = vstack( eden.graph.vertex_vectorize(graphs,r=3,d=3) )
@@ -74,7 +77,7 @@ def make_model(data,sequence_names=[],
     return model
 
 def predict(model, sequence):
-    graphs = getgraphs([sequence],['None'])
+    graphs = getgraphs([sequence],['None'], maxstructs=3)
     vecs = eden.graph.vertex_vectorize(graphs,r=3,d=3)
     res= [ model.predict(blob) for blob in vecs ]
     res = np.vstack(res)
