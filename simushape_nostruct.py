@@ -29,7 +29,7 @@ def shexec(cmd):
 
 
 def shape(sequence):
-    retcode,err,out = shexec("RNAshapes %s" % sequence)
+    retcode,err,out = shexec("RNAshapes -u -s -t 5 -c 10 %s | sort -n " % sequence)
     if retcode != 0:
         print "RNAshapes failed"
         return
