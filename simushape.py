@@ -80,7 +80,7 @@ def mask(x,y):
 def make_graphs(data, good_keys):
     return  [ eden_rna.sequence_dotbracket_to_graph(*data[key][1:]) for key in good_keys]
 
-def getXY(data,good_keys,r,d,DEBUG=False):
+def getXY(data,good_keys,r,d,DEBUG=False,n_bits=20):
     graphs =  make_graphs(data,good_keys)
     x = vstack( eg.vertex_vectorize(graphs,r=r,d=d) )
 
