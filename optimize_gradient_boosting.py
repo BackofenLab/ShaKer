@@ -24,7 +24,7 @@ def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
                      'loss': ['ls', 'lad', 'huber', 'quantile'],
                      'learning_rate': uniform(0.01,0.2),
                      'max_depth': rint(1, 6),
-                     'min_samples_split': rint(1, 5),
+                     'min_samples_split': rint(2, 5),
                      'min_samples_leaf': rint(1, 3),
                      'min_weight_fraction_leaf': uniform(0,.05),
                      'max_features': ["auto", 'sqrt' , 'log2'],
