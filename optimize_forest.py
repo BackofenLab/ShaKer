@@ -7,12 +7,13 @@ import simushape as ss
 from simushape import get_all_data, getXY
 
 
+
 def quickladdata():
-    ok = ['ADDRSW', 'ZHCV', 'Z-CIDGMP-1', '23sRNA', 'p564', 'srRNA', 'MDLOOP', 'R009', 'TRP5']
-    data = get_all_data('data/RNA16.react','data/RNA16.dbn')
-    for k in data.keys():
-        if k not in ok:
-            data.pop(k)
+    data = ss.get_all_data('data/RNA16.react','data/RNA16.dbn')
+    data2 = ss.get_all_data('data/RNA20.react','data/RNA20.dbn')
+    data.update(data2)
+    for e in ['ZHCV', 'Lysine', 'GLYCFN']:
+        data.pop(e)
     return data
 
 
@@ -38,4 +39,4 @@ def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
     print blu.best_score_
 
 
-opti_forest(data, n_jobs=2, n_iter=4)
+opti_forest(data, n_jobs=24, n_iter=5000)
