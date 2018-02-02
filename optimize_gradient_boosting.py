@@ -23,13 +23,13 @@ def uniform(lower, upper):
 def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
     model = xgboost.XGBRegressor()
     param_dist = {
-                     'max_depth': rint(1, 7),
+                     'max_depth': rint(5, 15), # max was 6 and it dominated
                      'learning_rate': uniform(0.01,0.2),
-                        'n_estimators': rint(50, 200),
-                          'booster': ['gbtree', 'gblinear' , 'dart'],
+                        'n_estimators': rint(50, 150),
+                          'booster': ['gbtree',  'dart'],# gblin is never picked
                     'gamma':[0,0.005,0.001],
-        'min_child_weight' : [1,2,3],
-'max_delta_step' : [0,1,2],
+        'min_child_weight' : [2,3,4,5,6], # max was 3 and it pushed up
+'max_delta_step' : [0,1,2], # 1 seems best,, but we try again..
 'reg_alpha' : uniform(.5,1),
 'reg_lambda' : uniform(0.5,1)
     }
