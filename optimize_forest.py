@@ -8,16 +8,20 @@ from simushape import get_all_data, getXY
 
 
 
-def quickladdata():
-    data = ss.get_all_data('data/RNA16.react','data/RNA16.dbn')
-    data2 = ss.get_all_data('data/RNA20.react','data/RNA20.dbn')
-    data.update(data2)
+def quickladdata(dataset='36'):
+    
+    if dataset == '36':
+        data = ss.get_all_data('data/RNA16.react','data/RNA16.dbn')
+        data2 = ss.get_all_data('data/RNA20.react','data/RNA20.dbn')
+        data.update(data2)
+    else:
+        data = ss.get_all_data('data/RNA%s.react' % dataset,'data/RNA%s.dbn' % dataset)
+
     for e in ['ZHCV', 'Lysine', 'GLYCFN']:
-        data.pop(e)
+        data.pop(e,None)
     return data
 
 
-data= quickladdata()
 
 
 def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
@@ -30,7 +34,7 @@ def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
                   'max_features': [None], # None is best
                   'min_impurity_split': [0.03, 0.02, 0.01, 0.04],  # min_impurity_decrease
                   "bootstrap": [True],  # false conflicts with oob score thing
-                  "oob_score": [False, True]}
+                  "oob_score": [False]}
 
     X,y = getXY(data,data.keys(),r,d)
     blu = rsearch(model, param_distributions=param_dist, n_iter=n_iter,n_jobs=n_jobs)
@@ -38,5 +42,13 @@ def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
     print blu.best_params_
     print blu.best_score_
 
-
-opti_forest(data, n_jobs=24, n_iter=5000)
+print "*"*80
+print "16"
+data= quickladdata('16')
+opti_forest(data, n_jobs=24, n_iter=1000)
+print "20"
+data= quickladdata('20')
+opti_forest(data, n_jobs=24, n_iter=1000)
+print "36"
+data= quickladdata('36')
+opti_forest(data, n_jobs=24, n_iter=1000)

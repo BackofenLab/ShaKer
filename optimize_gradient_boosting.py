@@ -43,4 +43,4 @@ def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
     print blu.best_score_
 
 
-opti_forest(data, n_jobs=24, n_iter=4000)
+opti_forest(data, n_jobs=24, n_iter=3500)
