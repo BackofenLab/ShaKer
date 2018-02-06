@@ -8,7 +8,7 @@ from simushape import get_all_data, getXY
 
 
 
-def quickladdata(dataset='36'):
+def quickloaddata(dataset='36'):
     
     if dataset == '36':
         data = ss.get_all_data('data/RNA16.react','data/RNA16.dbn')
@@ -42,13 +42,14 @@ def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
     print blu.best_params_
     print blu.best_score_
 
-print "*"*80
-print "16"
-data= quickladdata('16')
-opti_forest(data, n_jobs=24, n_iter=1000)
-print "20"
-data= quickladdata('20')
-opti_forest(data, n_jobs=24, n_iter=1000)
-print "36"
-data= quickladdata('36')
-opti_forest(data, n_jobs=24, n_iter=1000)
+if __name__ == "__main__":
+    print "*"*80
+    print "16"
+    data= quickloaddata('16')
+    opti_forest(data, n_jobs=24, n_iter=1000)
+    print "20"
+    data= quickloaddata('20')
+    opti_forest(data, n_jobs=24, n_iter=1000)
+    print "36"
+    data= quickloaddata('36')
+    opti_forest(data, n_jobs=24, n_iter=1000)

@@ -20,6 +20,20 @@ def read_dbn(path):
             res.append(a_thing)
     return res
 
+def read_fasta(path):
+    with open(path,'r') as fi:
+        text = fi.read()
+        text = text.split(">")[1:]
+        res=[]
+        for e in text:
+            a_thing = [thing for thing in e.split('\n') if len(thing) > 1]
+            if len(a_thing)!=2:
+                print "ERRER", a_thing ,e
+                return
+            res.append(a_thing)
+    return res
+
+
 def read_react(path):
     with open(path,'r') as fi:
         text = fi.read()
