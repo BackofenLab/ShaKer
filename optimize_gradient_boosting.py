@@ -23,15 +23,15 @@ def uniform(lower, upper):
 def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
     model = xgboost.XGBRegressor()
     param_dist = {
-                     'max_depth': [13,14], # 13 and 14 are bestd
-                     'learning_rate': uniform(0.02,0.05),
-                        'n_estimators': rint(60, 100),
+                     'max_depth': [14], # 13 and 14 are bestd
+                     'learning_rate': [0.03], # rate id 0.022 and nesti of 94 is also ok
+                        'n_estimators': [65],
                           'booster': ['gbtree',  'dart'],
                     'gamma':[0,0.005,0.001],
         'min_child_weight' : [3], # best
 'max_delta_step' : [1], # best
-'reg_alpha' : uniform(.7,1),
-'reg_lambda' : uniform(0.5,1)
+'reg_alpha' : uniform(.8,1),
+'reg_lambda' : uniform(0.6,1)
     }
 
     X,y = ss.getXY(data,data.keys(),r,d)
@@ -43,4 +43,4 @@ def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
     print blu.best_score_
 
 
-opti_forest(data, n_jobs=24, n_iter=10000)
+opti_forest(data, n_jobs=24, n_iter=4000)
