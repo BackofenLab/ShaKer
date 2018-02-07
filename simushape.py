@@ -120,7 +120,7 @@ def getXY(data,good_keys,r=3,d=3,DEBUG=False,n_bits=16):
         print "x,y after filtering",x.shape, y.shape
     return x,y
 
-
+# {'reg_alpha': 0.81547748872761927, 'learning_rate': 0.03, 'max_delta_step': 1, 'min_child_weight': 3, 'n_estimators': 65, 'reg_lambda': 0.93307324674007364, 'max_depth': 14, 'gamma': 0, 'booster': 'gbtree'}
 def make_model(data,sequence_names=[],
                DEBUG=False,
                r=3,
