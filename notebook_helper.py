@@ -6,7 +6,32 @@
 import simushape_nostruct  as sn
 import simushape as ss
 import numpy as np
+from graphlearn01.utils import draw
 
+import pylab as plt
+import matplotlib.colors as colors
+
+def annotate(g, shap):
+    n = g.nodes()
+    n.sort()
+    cm= plt.get_cmap("viridis")
+    for e, i in zip(n, shap):
+        g.node[e]["col"] =  "#AAAAAA"   if i == None else colors.rgb2hex(cm(i))
+        g.node[e]["none"] = ''
+    return g
+
+
+def draw3(graph, shape_list):
+    graphs = [annotate(graph.copy(), shape) for shape in shape_list]
+    draw.graphlearn(graphs, size=15, layout="RNA",vertex_color='col', vertex_label='none', edge_alpha=0.05, vertex_size=150,
+                    vertex_border=False, n_graphs_per_line=len(shape_list))
+
+
+def draw_seq_rea(sequence, react):
+    brack = sn.shape(sequence)[0][0]
+    graph = ss.eden_rna.sequence_dotbracket_to_graph(sequence,brack)
+    graph.graph['structure']= brack
+    draw3(graph,react)
 
 
 

@@ -34,6 +34,12 @@ def read_fasta(path):
     return res
 
 
+def float_or_none(item):
+    if item == 'NA':
+        return None
+    return float(item)
+
+
 def read_react(path):
     with open(path,'r') as fi:
         text = fi.read()
@@ -43,7 +49,7 @@ def read_react(path):
             lines = [thing for thing in e.split('\n') if len(thing) > 1]
             header = lines[0]
             data = [ e.strip().split() for e in lines[1:]  ]
-            data = [ float(d[1].strip()) for d in data if len(d)==2 ]
+            data = [ float_or_none(d[1].strip()) for d in data if len(d)==2 ]
             res[header.strip()] = data
     return res
 
@@ -85,7 +91,7 @@ import numpy as np
 
 from sklearn.ensemble import RandomForestRegressor
 def mask(x,y):
-    mask = np.array([ i for i,e in enumerate(y) if e!=-999.0])
+    mask = np.array([ i for i,e in enumerate(y) if e!=None])
     y=y[mask]
     x=x[mask]
     return x,y
@@ -94,7 +100,7 @@ def mask(x,y):
 def make_graphs(data, good_keys):
     return  [ eden_rna.sequence_dotbracket_to_graph(*data[key][1:]) for key in good_keys]
 
-def getXY(data,good_keys,r,d,DEBUG=False,n_bits=20):
+def getXY(data,good_keys,r=3,d=3,DEBUG=False,n_bits=16):
     graphs =  make_graphs(data,good_keys)
     x = vstack( eg.vertex_vectorize(graphs,r=r,d=d) )
 
