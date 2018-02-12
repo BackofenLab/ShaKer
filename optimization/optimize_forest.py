@@ -11,11 +11,11 @@ from simushape import get_all_data, getXY
 def quickloaddata(dataset='36'):
     
     if dataset == '36':
-        data = ss.get_all_data('data/RNA16.react','data/RNA16.dbn')
-        data2 = ss.get_all_data('data/RNA20.react','data/RNA20.dbn')
+        data = ss.get_all_data('../data/RNA16.react','../data/RNA16.dbn')
+        data2 = ss.get_all_data('../data/RNA20.react','../data/RNA20.dbn')
         data.update(data2)
     else:
-        data = ss.get_all_data('data/RNA%s.react' % dataset,'data/RNA%s.dbn' % dataset)
+        data = ss.get_all_data('../data/RNA%s.react' % dataset,'../data/RNA%s.dbn' % dataset)
 
     for e in ['ZHCV', 'Lysine', 'GLYCFN']:
         data.pop(e,None)

@@ -70,11 +70,17 @@ def get_all_data(react, dbn):
     return combine_dbn_react(dbn,react)
 
 
+
+def format_shape(name,data, noheader=False):
+    vout = lambda x: "\n".join( [str(i + 1) + "\t" + str(e) for i, e in enumerate(x)])
+    if noheader:
+        return "%s\n\n" % vout(data)
+    return ">%s\n%s\n\n" % (name,vout(data))
+
 def dump_shape(result, fname):
     with open(fname,'w') as f:
         for k,v in result.items():
-            vout = lambda x: "\n".join( [str(i + 1) + "\t" + str(e) for i, e in enumerate(v)])
-            f.write(">%s\n%s\n\n" % (k,vout(v)))
+            f.write(format_shape(k,v))
 
 
 
