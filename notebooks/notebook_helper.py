@@ -27,8 +27,11 @@ def draw3(graph, shape_list):
                     vertex_border=False, n_graphs_per_line=len(shape_list))
 
 
-def draw_seq_rea(sequence, react):
-    brack = sn.shape(sequence)[0][0]
+def draw_seq_rea(sequence, react, stru=None):
+    if stru != None:
+        brack = stru
+    else:
+        brack = sn.shape(sequence)[0][0]
     graph = ss.eden_rna.sequence_dotbracket_to_graph(sequence,brack)
     graph.graph['structure']= brack
     draw3(graph,react)

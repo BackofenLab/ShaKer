@@ -86,8 +86,15 @@ def predict(model, sequence, maxstruct=3):
     #return res.mean(axis=0)
     return np.median(res,axis=0)
 
+def predict_and_scale(model, sequence, maxstruct=3):
+    graphs = getgraphs([sequence],['None'], maxstructs=maxstruct)
+    vecs = eden.graph.vertex_vectorize(graphs,r=3,d=3)
+    res= [ model.predict(blob) for blob in vecs ]
+    res = np.vstack(res)
+    med= np.median(res,axis=0)
 
-
+    scal =  res.max()/ med.max()
+    return med, med*scal
 
 
 def remove(li, it):

@@ -98,6 +98,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 def mask(x,y):
     mask = np.array([ i for i,e in enumerate(y) if e!=None])
+    y= np.array(y)
     y=y[mask]
     x=x[mask]
     return x,y
