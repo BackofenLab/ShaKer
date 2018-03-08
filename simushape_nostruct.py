@@ -1,42 +1,11 @@
-import simushape
 import numpy as np
-import eden_rna
 from scipy.sparse import vstack
 import eden
+import eden_rna
 from sklearn.ensemble import RandomForestRegressor
-#####
-# laod  data is same as simushape.py
-####
+import simushape
+from rna_tools import shape
 
-#######
-# wrap shapes
-######
-
-import subprocess
-import re
-
-def shexec(cmd):
-    '''
-    :param cmd:
-    :return: (exit-code, stderr, stdout)
-
-    the subprocess module is chogeum.. here is a workaround
-    '''
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    output, stderr = process.communicate()
-    retcode = process.poll()
-    return (retcode, stderr, output)
-
-
-def shape(sequence):
-    retcode,err,out = shexec("RNAshapes -u -s -t 5 -c 10 %s | sort -n " % sequence)
-    if retcode != 0:
-        print "RNAshapes failed"
-        return
-
-    energy = re.findall(r"[-+]?[0-9]*\.?[0-9]+",out)
-    shape =[ a.strip() for a in re.findall(r' [.()]+ ',out) ]
-    return shape, energy
 
 
 def getgraphs(sequences, react,maxstructs=3):
@@ -78,6 +47,18 @@ def make_model(data,sequence_names=[],
     model.fit(x,y)
     return model
 
+
+
+
+def predict_shreps_proba(model, sequence, cutoff=0.01):
+    structs, probabilities = r
+    graphs = getgraphs([sequence],['None'], maxstructs=maxstruct)
+    vecs = eden.graph.vertex_vectorize(graphs,r=3,d=3)
+    res= [ model.predict(blob) for blob in vecs ]
+    res = np.vstack(res)
+    #return res.mean(axis=0)
+    return np.median(res,axis=0)
+
 def predict(model, sequence, maxstruct=3):
     graphs = getgraphs([sequence],['None'], maxstructs=maxstruct)
     vecs = eden.graph.vertex_vectorize(graphs,r=3,d=3)
@@ -104,7 +85,6 @@ def remove(li, it):
 
 
 def crossval(data,keys):
-
     for key in keys():
         trainset = remove(keys, key)
         mod = make_model(data,trainset)

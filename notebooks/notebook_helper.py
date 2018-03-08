@@ -1,8 +1,5 @@
-
-
-
-
-
+import rna_io
+import rna_tools
 import simushape_nostruct  as sn
 import simushape as ss
 import numpy as np
@@ -31,7 +28,7 @@ def draw_seq_rea(sequence, react, stru=None):
     if stru != None:
         brack = stru
     else:
-        brack = sn.shape(sequence)[0][0]
+        brack = rna_tools.shape(sequence)[0][0]
     graph = ss.eden_rna.sequence_dotbracket_to_graph(sequence,brack)
     graph.graph['structure']= brack
     draw3(graph,react)
@@ -39,13 +36,13 @@ def draw_seq_rea(sequence, react, stru=None):
 
 
 def get_test_data():
-    data = ss.get_all_data('data/RNA16.react','data/RNA16.dbn')
+    data = rna_io.get_all_data('data/RNA16.react', 'data/RNA16.dbn')
     #data2 = ss.get_all_data('data/RNA20.react','data/RNA20.dbn')
     data.pop("GLYCFN",None) # data is bad
     data.pop("23sRNA",None) #2 long for RNAshapes
     data.pop("R009",None)   #2 long for shapes
 
-    data2 = ss.get_all_data('data/RNA20.react','data/RNA20.dbn')
+    data2 = rna_io.get_all_data('data/RNA20.react', 'data/RNA20.dbn')
 
     for e in ['P546', 'Adenine', 'tRNA-phe', 'M-Box', 'tRNA-asp','5srRNA' ]:
         data[e] = data2[e]

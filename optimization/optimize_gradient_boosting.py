@@ -3,13 +3,15 @@ from scipy.stats import uniform as uni
 
 #from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import RandomizedSearchCV as rsearch
+
+import rna_io
 import simushape as ss
 import xgboost
 
 
 def quickladdata():
-    data = ss.get_all_data('data/RNA16.react','data/RNA16.dbn')
-    data2 = ss.get_all_data('data/RNA20.react','data/RNA20.dbn')
+    data = rna_io.get_all_data('data/RNA16.react', 'data/RNA16.dbn')
+    data2 = rna_io.get_all_data('data/RNA20.react', 'data/RNA20.dbn')
     data.update(data2)
     for e in ['ZHCV', 'Lysine', 'GLYCFN']:
         data.pop(e)
