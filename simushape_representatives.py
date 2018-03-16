@@ -80,6 +80,7 @@ def weighted_average(weights, react_arrays):
 def predict(model, sequence, cutoff=0.0001):
     struct_proba = rna_tools.get_struct_and_proba(sequence,cutoff=cutoff)
     structures, weights =  zip(*struct_proba)
+    print weights
     graphs = map(lambda x: getgraph(sequence,x), structures)
     vecs = list(eden.graph.vertex_vectorize(graphs,r=3,d=3))
     predictions_all_structures = [ model.predict(blob) for blob in vecs ]
