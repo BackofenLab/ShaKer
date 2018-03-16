@@ -1,4 +1,5 @@
 def read_dbn(path):
+    '''returns (name sequcence dotbrack tupples)'''
     with open(path,'r') as fi:
         text = fi.read()
         text = text.split(">")[1:]
@@ -16,6 +17,7 @@ def read_dbn(path):
 
 
 def read_fasta(path):
+
     with open(path,'r') as fi:
         text = fi.read()
         text = text.split(">")[1:]
@@ -36,6 +38,7 @@ def float_or_none(item):
 
 
 def read_react(path):
+    '''returns {seqname:reactlist}'''
     with open(path,'r') as fi:
         text = fi.read()
         text = text.split(">")[1:]
@@ -50,6 +53,7 @@ def read_react(path):
 
 
 def combine_dbn_react(dbn,react):
+    '''returns {seqname:[react, sequence, dotbracketstring]}'''
     res = {}
     for name,seq,brack in dbn:
         re = react[name]
@@ -61,12 +65,14 @@ def combine_dbn_react(dbn,react):
 
 
 def get_all_data(react, dbn):
+    '''takes paths to .react and .dbn  returns {seqname:[react, sequence, dotbracketstring]}'''
     dbn = read_dbn(dbn)
     react = read_react(react)
     return combine_dbn_react(dbn,react)
 
 
 def format_shape(name,data, noheader=False):
+    '''takes shape data, returns .react string e.i. >seqname\nVal\nVal etc'''
     vout = lambda x: "\n".join( [str(i + 1) + "\t" + str(e) for i, e in enumerate(x)])
     if noheader:
         return "%s\n\n" % vout(data)
@@ -75,10 +81,12 @@ def format_shape(name,data, noheader=False):
 
 
 def write_shape(fname,react):
+    '''writes react file'''
     with open(fname,'w') as f:
         f.write(format_shape("", react, noheader=True))
 
 def dump_shape(result, fname):
+    '''writes many .react files'''
     with open(fname,'w') as f:
         for k,v in result.items():
             f.write(format_shape(k, v))
