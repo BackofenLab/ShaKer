@@ -1,65 +1,4 @@
 
-
-
-#####
-# READ AND WRITE DATA
-#####
-def read_dbn(path):
-    with open(path,'r') as fi:
-        text = fi.read()
-        text = text.split(">")[1:]
-        res=[]
-        for e in text:
-            a_thing = [thing for thing in e.split('\n') if len(thing) > 1]
-            if len(a_thing)!=3:
-                print "ERRER", a_thing ,e
-                return
-            if len(a_thing[1])!=len(a_thing[2]):
-                print "ERRER", a_thing ,e
-                return
-            res.append(a_thing)
-    return res
-
-def read_react(path):
-    with open(path,'r') as fi:
-        text = fi.read()
-        text = text.split(">")[1:]
-        res={}
-        for e in text:
-            lines = [thing for thing in e.split('\n') if len(thing) > 1]
-            header = lines[0]
-            data = [ e.strip().split() for e in lines[1:]  ]
-            data = [ float(d[1].strip()) for d in data if len(d)==2 ]
-            res[header.strip()] = data
-    return res
-
-
-def combine_dbn_react(dbn,react):
-    res = {}
-    for name,seq,brack in dbn:
-        re = react[name]
-        if len(re) == len(seq) == len(brack):
-            res[name]= (re,seq,brack)
-        else:
-            print "data for '%s' is corrupted, ignoring..." % name
-    return res
-
-def get_all_data(react, dbn):
-    dbn = read_dbn(dbn)
-    react = read_react(react)
-    return combine_dbn_react(dbn,react)
-
-
-def dump_shape(result, fname):
-    with open(fname,'w') as f:
-        for k,v in result.items():
-            vout = lambda x: "\n".join( [str(i + 1) + "\t" + str(e) for i, e in enumerate(v)])
-            f.write(">%s\n%s\n\n" % (k,vout(v)))
-
-
-
-
-
 #######
 # generate data _  struct given
 ########
@@ -71,7 +10,8 @@ import numpy as np
 
 from sklearn.ensemble import RandomForestRegressor
 def mask(x,y):
-    mask = np.array([ i for i,e in enumerate(y) if e!=-999.0])
+    mask = np.array([ i for i,e in enumerate(y) if e!=None])
+    y= np.array(y)
     y=y[mask]
     x=x[mask]
     return x,y
@@ -80,7 +20,7 @@ def mask(x,y):
 def make_graphs(data, good_keys):
     return  [ eden_rna.sequence_dotbracket_to_graph(*data[key][1:]) for key in good_keys]
 
-def getXY(data,good_keys,r,d,DEBUG=False):
+def getXY(data,good_keys,r=3,d=3,DEBUG=False,n_bits=16):
     graphs =  make_graphs(data,good_keys)
     x = vstack( eg.vertex_vectorize(graphs,r=r,d=d) )
 
@@ -100,7 +40,7 @@ def getXY(data,good_keys,r,d,DEBUG=False):
         print "x,y after filtering",x.shape, y.shape
     return x,y
 
-
+# {'reg_alpha': 0.81547748872761927, 'learning_rate': 0.03, 'max_delta_step': 1, 'min_child_weight': 3, 'n_estimators': 65, 'reg_lambda': 0.93307324674007364, 'max_depth': 14, 'gamma': 0, 'booster': 'gbtree'}
 def make_model(data,sequence_names=[],
                DEBUG=False,
                r=3,
