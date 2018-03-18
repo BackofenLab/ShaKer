@@ -17,18 +17,21 @@ def fold(sequence,react = None):
     return res[res.find("\n")+1: res.find(" ")]
 
 
-
-
-def rnashapes(sequence):
+def rnashapes(sequence, return_energy=False):
     """call rnashapes, return (dotbracket, energy)"""
     retcode,err,out = shexec("RNAshapes %s" % sequence)
+
+    #retcode,err,out = shexec("RNAshapes -u -s -t 5 -c 10 %s | sort -n " % sequence)
     if retcode != 0:
         print "RNAshapes failed"
         return
 
     energy = re.findall(r"[-+]?[0-9]*\.?[0-9]+",out)
     shape =[ a.strip() for a in re.findall(r' [.()]+ ',out) ]
-    return shape, energy
+    if return_energy:
+        return shape, energy
+    else:
+        return shape
 
 
 def get_ens_energy(seq,react=None):
@@ -64,27 +67,21 @@ def probability(structure,seq, react=None):
     """calc probabity of a structure given a sequence and optionaly reactivity data"""
     return energy_to_proba(get_ens_energy(seq,react),get_stru_energy(structure,seq,react))
 
-def get_struct_and_proba(seq, cutoff = 0.01):
-    """uses rnashapes to determine structure representatives, for the representatives, probabilities are calculated,
-
+def probabilities_of_structures(sequence, structure_list, cutoff = 0.01):
+    """calculate probabilities of structures for a sequence
     returns [(dotbracket,probability),..]
     """
-    ensemble_energy = get_ens_energy(seq)
-    structs, _ = rnashapes(seq)
-    energies = map( lambda x: get_stru_energy(x,seq), structs)
+    ensemble_energy = get_ens_energy(sequence)
+    energies = map(lambda x: get_stru_energy(x, sequence), structure_list)
     probabilities = map(lambda x:energy_to_proba(ensemble_energy, x), energies)
     #probabilities = normalize(probabilities, norm='l1').tolist()[0]
-    return [(stru,proba) for stru,proba in zip(structs,probabilities) if proba >= cutoff ]
-    #energy = get_energy(seq, structs[0])
-    #print energy
-    #cat ss cc | RNAfold -p0
-    #cat ss cc | RNAeval
+    return [(stru,proba) for stru,proba in zip(structure_list,probabilities) if proba >= cutoff ]
 
 def test():
     """a test :D"""
     testseq= "CCAUGAAUCACUCCCCUGUGAGGAACUACUGUCUUCACGCAGAAAGCGUCUAGCCAUGGCGUUAGUAUGAGUGUCGUGCAGCCUCCAGGACCCCC"
     testseq= "ggaaauaaUCGGAUGAAGAUAUGAGGAGAGAUUUCAUUUUAAUGAAACACCGAAGAAGUAAAUCUUUCAGGUAAAAAGGACUCAUAUUGGACGAACCUCUGGAGAGCUUAUCUAAGAGAUAACACCGAAGGAGCAAAGCUAAUUUUAGCCUAAACUCUCAGGUAAAAGGACGGAGaaaacaaaacaaagaaacaacaacaacaac"
-    print get_struct_and_proba(testseq)
+    print probabilities_of_structures(testseq, rnashapes(testseq))
 
 
 def shexec(cmd):
@@ -98,13 +95,4 @@ def shexec(cmd):
     return (retcode, stderr, output)
 
 
-def shape(sequence):
-    '''given a sequence,  call rnashapes with some hardcoded params and return [dotbracketstrings],[energies]'''
-    retcode,err,out = shexec("RNAshapes -u -s -t 5 -c 10 %s | sort -n " % sequence)
-    if retcode != 0:
-        print "RNAshapes failed"
-        return
-    energy = re.findall(r"[-+]?[0-9]*\.?[0-9]+",out)
-    shape =[ a.strip() for a in re.findall(r' [.()]+ ',out) ]
-    return shape, energy
 

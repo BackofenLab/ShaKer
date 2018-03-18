@@ -11,7 +11,7 @@ from sklearn.preprocessing import normalize
 
 
 
-def crosspredict(data, keys, cutoff=0.01):
+def crosspredict(data, keys, seq_to_db_function=rna_tools.rnashapes,cutoff=0.01):
     '''
     data = {seqname:[shapearray, sequence, structure]}
 
@@ -21,7 +21,7 @@ def crosspredict(data, keys, cutoff=0.01):
     for key in data.keys():
         trainkeys = remove(keys, key)
         mod = make_model(data,trainkeys)
-        yield predict(mod, data[key][1], cutoff=cutoff)
+        yield predict(mod, data[key][1], seq_to_db_function=seq_to_db_function,,cutoff=cutoff)
 
 
 
@@ -85,8 +85,9 @@ def weighted_average(weights, react_arrays):
     weights = normalize(weights, norm='l1').tolist()[0]
     return sum([ array*weight for array, weight in zip(react_arrays,weights) ])
 
-def predict(model, sequence, cutoff=0.0001):
-    struct_proba = rna_tools.get_struct_and_proba(sequence,cutoff=cutoff)
+def predict(model, sequence,seq_to_db_function= rna_tools.rnashapes, cutoff=0.0001):
+
+    struct_proba = rna_tools.probabilities_of_structures(sequence, seq_to_db_function(sequence), cutoff=cutoff)
     structures, weights =  zip(*struct_proba)
     print weights
     graphs = map(lambda x: getgraph(sequence,x), structures)
