@@ -21,7 +21,7 @@ def crosspredict(data, keys, seq_to_db_function=rna_tools.rnashapes,cutoff=0.01)
     for key in data.keys():
         trainkeys = remove(keys, key)
         mod = make_model(data,trainkeys)
-        yield predict(mod, data[key][1], seq_to_db_function=seq_to_db_function,,cutoff=cutoff)
+        yield predict(mod, data[key][1], seq_to_db_function=seq_to_db_function,cutoff=cutoff)
 
 
 
