@@ -4,13 +4,13 @@ import eden
 import eden_rna
 from sklearn.ensemble import RandomForestRegressor
 import simushape
-from rna_tools import shape
+from rna_tools import rnashapes
 
 
 
 def getgraphs(sequences, react,maxstructs=3):
    for seq,r in zip(sequences,react):
-       for stru in shape(seq)[0][:maxstructs]: # MAXIMUM structures looked at
+       for stru in rnashapes(seq)[0][:maxstructs]: # MAXIMUM structures looked at
            graph=  eden_rna.sequence_dotbracket_to_graph(seq,stru)
            graph.graph['rea']=r
            yield graph

@@ -17,6 +17,9 @@ def fold(sequence,react = None):
     return res[res.find("\n")+1: res.find(" ")]
 
 
+
+
+
 def rnashapes(sequence, return_energy=False):
     """call rnashapes, return (dotbracket, energy)"""
     retcode,err,out = shexec("RNAshapes %s" % sequence)

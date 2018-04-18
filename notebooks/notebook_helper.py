@@ -36,13 +36,13 @@ def draw_seq_rea(sequence, react, stru=None):
 
 
 def get_test_data():
-    data = rna_io.get_all_data('data/RNA16.react', 'data/RNA16.dbn')
+    data = rna_io.get_all_data('../data/RNA16.react', '../data/RNA16.dbn')
     #data2 = ss.get_all_data('data/RNA20.react','data/RNA20.dbn')
     data.pop("GLYCFN",None) # data is bad
     data.pop("23sRNA",None) #2 long for RNAshapes
     data.pop("R009",None)   #2 long for shapes
 
-    data2 = rna_io.get_all_data('data/RNA20.react', 'data/RNA20.dbn')
+    data2 = rna_io.get_all_data('../data/RNA20.react', '../data/RNA20.dbn')
 
     for e in ['P546', 'Adenine', 'tRNA-phe', 'M-Box', 'tRNA-asp','5srRNA' ]:
         data[e] = data2[e]
