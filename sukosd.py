@@ -1,7 +1,7 @@
 import os
 import random
 from math import exp, pow, sqrt, fabs
-
+import numpy as np
 # hacked version of sukosds SHAPE simulation method
 
 def expCDF(x):
@@ -114,7 +114,7 @@ def sukosd(dotbracket):
             else:
                     o = 0;
             data.append( generateValue(real_pairing[i],m,o))
-    return data
+    return np.array(data)
 
 
 
