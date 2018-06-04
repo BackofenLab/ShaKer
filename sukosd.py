@@ -3,6 +3,7 @@ import random
 from math import exp, pow, sqrt, fabs
 import numpy as np
 # hacked version of sukosds SHAPE simulation method
+# http://bioinformatics.aut.ac.ir/HRDSSD/
 
 def expCDF(x):
 	#Exponential distribution CDF
