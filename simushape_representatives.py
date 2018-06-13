@@ -50,6 +50,7 @@ def modelpredict(data, keys):
     '''
     print "Crosspredict"
     print "keys : ", keys
+    #print "data ", data
     trainkeys = ['R009', '23sRNA']
     mod = make_model(data, trainkeys)
     print "trainkeys : ", trainkeys

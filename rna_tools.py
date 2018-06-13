@@ -13,28 +13,24 @@ from os.path import isfile #Milads
 import rna_accuracy
 
 
-def fold(sequence,react = None):
+def fold(sequence,react = None, return_dotplot= False):
     """call rna fold, return dotbracket string"""
     
-    print "RNAfold"
+    #print "RNAfold"
+
     if react==None:
-        cmd = 'echo "%s" | RNAfold -p '  % sequence
+        cmd = 'echo "%s" | RNAfold '  % sequence
     else:
         with open('shap.tmp','w') as f:
             f.write(rna_io.format_shape("", react, noheader=True))
-        cmd = 'echo "%s" | RNAfold --shape shap.tmp -p'  % sequence
+        cmd = 'echo "%s" | RNAfold --shape shap.tmp '  % sequence
+
+    if return_dotplot:
+        #print "true"
+        cmd+= " -p"
+
     res = shexec(cmd)[2]
-
-    #rna_accuracy.get_structure_accuracy(./notebooks/dot.ps, res[res.find("\n")+1: res.find(" ")]) #to compute accuracy
-    #print "accuracy : ", rna_accuracy.get_structure_accuracy(['./notebooks/dot.ps'],[res[res.find("\n")+1: res.find(" ")]])
-    
-    print "accuracy : ", rna_accuracy.get_structure_accuracy(['./notebooks/dot.ps'],[[a.strip() for a in re.findall(r'\n[.()]+', res)]])
-    
-    #print "dot.ps", dot.ps
     return res[res.find("\n")+1: res.find(" ")]
-
-
-
 
 
 def rnashapes(sequence, return_energy=False):

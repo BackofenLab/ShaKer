@@ -81,10 +81,14 @@ def get_expected_accuracy(reference_struct, dp_matrix):
 
 def get_structure_accuracy(dp_ps_files,ref_structures):
     for dp_ps, ref_struct in zip(dp_ps_files,ref_structures):
-        print('Compute accuracy for: ', dp_ps, ref_struct)
+        #print "ref_struct ", ref_struct
+        #print('Compute accuracy for: ', dp_ps, ref_struct)
+        #print "dp_ps ", dp_ps
+        #print "os.path.isfile(dp_ps) ", os.path.isfile(dp_ps)
         assert(os.path.isfile(dp_ps))
         dp_matrix = parse_dp_ps(dp_ps)
         seq_score = get_expected_accuracy(ref_struct, dp_matrix)
+        print "accuracy ", seq_score
     return seq_score
 
 #get_structure_accuracy(['./notebooks/dot.ps'], ['(((((((..((((........)))).(((((.......))))).....(((((.......))))))))))))....'])
