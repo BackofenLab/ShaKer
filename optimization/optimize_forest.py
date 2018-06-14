@@ -3,10 +3,10 @@ from scipy.stats import randint as rint
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import RandomizedSearchCV as rsearch
 
-import rna_io
+from rna_tools import rna_io
 import simushape as ss
 from simushape import getXY
-from rna_io import get_all_data
+from rna_tools.rna_io import get_all_data
 
 
 def quickloaddata(dataset='36'):

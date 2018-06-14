@@ -1,4 +1,4 @@
-import rna_io
+from rna_tools import rna_io
 import rna_tools
 import simushape_nostruct  as sn
 import simushape as ss

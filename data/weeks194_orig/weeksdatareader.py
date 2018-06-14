@@ -4,8 +4,7 @@
 import sys
 sys.path.append("../..")
 import rna_tools
-import rna_io
-
+from rna_tools import rna_io
 
 prefix ="/home/ikea/mustoe_2018_DATA_SOFTWARE/Mustoe2018_data/"
 
@@ -50,7 +49,7 @@ def process_folder(foldername):
     
     with open(foldername+".dbn","w") as f:
         text = ''
-        react = rna_io.read_react(foldername+".react")
+        react = rna_io.read_react(foldername + ".react")
 
         for header, sequence in zip(allheaders, allsequences):
             db = rna_tools.fold(sequence, react[header])
