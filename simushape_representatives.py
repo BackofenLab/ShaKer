@@ -1,3 +1,8 @@
+#####
+#  shares a lot of code with simushape, i should merge the 2
+####
+
+
 import numpy as np
 from scipy.sparse import vstack
 import eden
@@ -22,6 +27,23 @@ def crosspredict(data, keys, seq_to_db_function=rna_tools.rnashapes,cutoff=0.01)
         trainkeys = remove(keys, key)
         mod = make_model(data,trainkeys)
         yield predict(mod, data[key][1], seq_to_db_function=seq_to_db_function,cutoff=cutoff)
+
+
+def compare_plfold_access(data, keys, seq_to_db_func = rna_tools.rnashapes):
+    '''
+    :param data:
+    :param keys:
+    :param seq_to_db_func:
+    :return:
+    1. get reactivity
+    2. get plfold prediction
+    3. do the rank comparison...
+    '''
+    reactivity = list(crosspredict(data,keys, seq_to_db_function=seq_to_db_func))
+    #plfold = [rna_tools.] # see rna tools.. i should probably rewrite this stuff
+    #from scipy.stats import spearmanr as spea
+
+
 
 
 

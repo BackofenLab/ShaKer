@@ -9,6 +9,7 @@ import pylab as plt
 import matplotlib.colors as colors
 
 def annotate(g, shap):
+    """ sets the col argument in the nodes of g, accorgin to shape data shap"""
     n = g.nodes()
     n.sort()
     cm= plt.get_cmap("viridis")
@@ -19,15 +20,18 @@ def annotate(g, shap):
 
 
 def draw3(graph, shape_list):
+    '''draws graph len(shape_list) times in a row, colored by shape data'''
     graphs = [annotate(graph.copy(), shape) for shape in shape_list]
     draw.graphlearn(graphs, size=15, layout="RNA",vertex_color='col', vertex_label='none', edge_alpha=0.05, vertex_size=150,
                     vertex_border=False, n_graphs_per_line=len(shape_list))
 
 
 def draw_seq_rea(sequence, react, stru=None):
+    ''' given sequence, reactivuty and maybe a structure: draw graph row showing reactivity '''
     if stru != None:
         brack = stru
     else:
+        print "FIXME, i should use rnafold here"
         brack = rna_tools.shape(sequence)[0][0]
     graph = ss.eden_rna.sequence_dotbracket_to_graph(sequence,brack)
     graph.graph['structure']= brack
@@ -35,7 +39,15 @@ def draw_seq_rea(sequence, react, stru=None):
 
 
 
+
+
+
+
+
+
 def get_test_data():
+    print "removed get_test_data"
+    '''
     data = rna_io.get_all_data('../data/RNA16.react', '../data/RNA16.dbn')
     #data2 = ss.get_all_data('data/RNA20.react','data/RNA20.dbn')
     data.pop("GLYCFN",None) # data is bad
@@ -43,14 +55,16 @@ def get_test_data():
     data.pop("R009",None)   #2 long for shapes
 
     data2 = rna_io.get_all_data('../data/RNA20.react', '../data/RNA20.dbn')
-
     for e in ['P546', 'Adenine', 'tRNA-phe', 'M-Box', 'tRNA-asp','5srRNA' ]:
         data[e] = data2[e]
-
     return data
+    '''
 
 def get_train_data():
+    print "removed get train data"
     return get_test_data()
+
+
 
 
 

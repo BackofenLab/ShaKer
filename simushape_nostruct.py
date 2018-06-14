@@ -1,3 +1,8 @@
+###
+# this is hard cancer, it trains a model on some rna shapes structures,  also precition works on a set of structures
+###
+
+
 import numpy as np
 from scipy.sparse import vstack
 import eden

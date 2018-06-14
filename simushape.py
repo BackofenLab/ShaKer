@@ -1,6 +1,8 @@
 
 #######
 # generate data _  struct given
+
+# only makes a model and predicts given struct..
 ########
 
 import eden_rna

@@ -1,3 +1,5 @@
+# i am ok with this :)
+
 def read_dbn(path):
     '''returns (name sequcence dotbrack tupples)'''
     with open(path,'r') as fi:
