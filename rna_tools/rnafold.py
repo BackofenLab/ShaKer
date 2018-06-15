@@ -1,4 +1,5 @@
-from rna_tools import rna_io, shexec
+import rna_io
+from rna_tools import shexec
 
 
 def fold(sequence,react = None, return_dotplot= False):

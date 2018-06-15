@@ -2,17 +2,19 @@ import numpy as np
 from scipy.sparse import vstack
 import eden
 import eden_rna
+import eden.graph as eg
 from sklearn.ensemble import RandomForestRegressor
-import rna_tools
+import rna_tools.rnashapes
+
 
 from sklearn.preprocessing import normalize
 import xgboost
 from scipy.stats import uniform as uni
 
+from rna_tools.structureprobability import probabilities_of_structures
 
 
-
-def crosspredict(data, keys, seq_to_db_function=rna_tools.rnashapes):
+def crosspredict(data, keys, seq_to_db_function=rna_tools.rnashapes.rnashapes):
     '''
     data = {seqname:[shapearray, sequence, structure]}
 
@@ -20,7 +22,6 @@ def crosspredict(data, keys, seq_to_db_function=rna_tools.rnashapes):
     yield result for each
     '''
     for key in data.keys():
-        print "key ", key
         trainkeys = remove(keys, key)
         mod = make_model(data,trainkeys)
         yield predict(mod, data[key][1], seq_to_db_function=seq_to_db_function)
@@ -99,19 +100,20 @@ def weighted_average(weights, react_arrays):
 
 
 def predict(model, sequence,seq_to_db_function= rna_tools.rnashapes):
+
     db_list = seq_to_db_function(sequence)
 
     if len(db_list)==1:
-        graph = eden_rna.sequence_dotbracket_to_graph(seq, stru)
+        graph = eden_rna.sequence_dotbracket_to_graph(sequence, db_list[0])
         return model.predict(eg.vertex_vectorize([graph])[0])
 
     # get probability for each structure
-    struct_proba = rna_tools.probabilities_of_structures(sequence, db_list)
+    struct_proba = probabilities_of_structures(sequence, db_list)
     structures, weights =  zip(*struct_proba)
 
     # edenize and predict reacticuty
     graphs = map(lambda x: getgraph(sequence,x), structures)
-    vecs = list(eden.graph.vertex_vectorize(graphs,r=3,d=3))
+    vecs = list(eg.vertex_vectorize(graphs,r=3,d=3))
     predictions_all_structures = [ model.predict(blob) for blob in vecs ]
 
     # mix reactivity with probabilities

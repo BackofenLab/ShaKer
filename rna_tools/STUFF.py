@@ -1,14 +1,5 @@
-import subprocess
-import rna_io
-import re
-import math
-import collections
-import rna_io
-import os
-from rna_tools import rna_accuracy, shexec
-from os.path import isfile
-from sklearn.preprocessing import normalize
-import rna_tools.rna_accuracy  # is this even in the repo?
+
+from rna_tools import shexec
 
 
 #################

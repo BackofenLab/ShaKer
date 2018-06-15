@@ -1,6 +1,6 @@
-from rna_tools import rna_io
-
-
+import rna_io
+import os
+import collections
 def soheilas_plfold(sequence, react=None):
 
     resultlist = []
@@ -33,9 +33,9 @@ def call_vienna_plfold(sequence, seq_name, react=None, W=200, L=150):
     from subprocess import Popen, PIPE
     dp_file_name = "{}_dp.ps".format(seq_name)
     unp_file_name = "{}_lunp".format(seq_name)
-    if isfile(dp_file_name):  # Caution Race condition may occur
+    if os.isfile(dp_file_name):  # Caution Race condition may occur
         os.remove(dp_file_name)
-    if isfile(unp_file_name):  # Caution Race condition may occur
+    if os.isfile(unp_file_name):  # Caution Race condition may occur
         os.remove(unp_file_name)
 
     #shapefile = open("tRNAp.txt", "r")
@@ -60,9 +60,9 @@ def call_vienna_plfold(sequence, seq_name, react=None, W=200, L=150):
             print ("Warning in calling call_RNAfold:\n {} {}\n".format(out, err))
         else:
             raise RuntimeError("Error in calling call_RNAfold: {} {}\n".format(out, err))
-    if not isfile(dp_file_name):
+    if not os.isfile(dp_file_name):
         raise RuntimeError("Error: Expected dp file: {} is not created!".format(dp_file_name))
-    if not isfile(unp_file_name):
+    if not os.isfile(unp_file_name):
         raise RuntimeError("Error: Expected lunp file: {} is not created!".format(unp_file_name))
 
     return dp_file_name, unp_file_name

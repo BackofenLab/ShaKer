@@ -1,3 +1,4 @@
+import subprocess
 def shexec(cmd):
     '''
     takes cmd, the command

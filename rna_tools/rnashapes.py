@@ -1,4 +1,5 @@
 from rna_tools import shexec
+import re
 
 
 def rnashapes(sequence, return_energy=False):
