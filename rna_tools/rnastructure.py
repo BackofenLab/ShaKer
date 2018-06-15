@@ -1,20 +1,10 @@
-
 from rna_tools import shexec
 
-
-#################
-# I HAVE NO IDEA WHAT THIS IS
-###################
-
-def soheilas_workaround(sequence):
-    #sequence = "CCAUGAAUCACUCCCCUGUGAGGAACUACUGUCUUCACGCAGAAAGCGUCUAGCCAUGGCGUUAGUAUGAGUGUCGUGCAGCCUCCAGGACCCCC"
-    print "  I AM HERE"
+def rnastructure_wrap(sequence):
     filename = 'asdasd.seq'
     with open(filename, "w") as f:
         f.write(">asdasd\n%s\n" % sequence)
-
     res = rnastructure("asdasd.seq", filename, 'test3.ct')
-    print "RNAstructureeeeeeee", res
     return res
 
 
@@ -29,20 +19,16 @@ def rnastructure(seqname, fastafile, ctFile, return_energy=False):
                 arraySeq.append(lineS)
         lSeq= len(arraySeq[1])
 
-        #read from the file ctFile and save it as output
-        #F = open("test2.ct", "r")
-        #E = F.read()
-        #energy = re.findall(r"[-+][0-9]*\.[0-9]+", E)
-
         with open(ctFile, "r") as C:
             array = []
             for line in C:
                 array.append(line)
 
+            #array = C.read().split("\n")
+
         l = len(array)
-        column = []
+
         str = []
-        k = 0
         for i in range(l):
             if (i % lSeq) != 0:
                 column = array[i].split()
@@ -57,8 +43,7 @@ def rnastructure(seqname, fastafile, ctFile, return_energy=False):
 
         strSeq = ''.join(str)
         shape = strSeq.split(",")
-        #convertCtToDotbracket(E)
-        #shape = [a.strip() for a in re.findall(r'\n[.()]+', out)]
+
         if return_energy:
             return shape
         else:
