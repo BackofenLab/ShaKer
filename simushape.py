@@ -5,8 +5,6 @@ import eden_rna
 import eden.graph as eg
 from sklearn.ensemble import RandomForestRegressor
 import rna_tools.rnashapes
-
-
 from sklearn.preprocessing import normalize
 import xgboost
 from scipy.stats import uniform as uni
@@ -137,55 +135,6 @@ def predict(model, sequence,seq_to_db_function= rna_tools.rnashapes):
 
 
 
-
-
-
-
-
-
-
-
-####
-#  CRAP NEEDS COMMENTS
-####
-def crosspredictInter(data, keys, seq_to_db_function=rna_tools.rnashapes):
-    data.pop("R009",None)
-    data.pop("23sRNA",None)
-    for key in data.keys():
-        trainkeys = remove(keys, key)
-        mod = make_model(data,trainkeys)
-        yield predictInter(mod, data[key][1], seq_to_db_function=seq_to_db_function)
-
-def predictInter(model, sequence,seq_to_db_function= rna_tools.rnashapes):
-    struct_proba = rna_tools.probabilities_of_structures(sequence, seq_to_db_function(sequence))# contains one structure and its probability
-    structures, weights =  zip(*struct_proba)# one number that specifies the weight
-    graphs = map(lambda x: getgraph(sequence,x), structures)
-    vecs = list(eden.graph.vertex_vectorize(graphs,r=3,d=3))
-    predictions_all_structures = [ model.predict(blob) for blob in vecs ]
-    return predictions_all_structures
-
-def modelpredict(data, keys):
-    '''
-    data = {seqname:[shapearray, sequence, structure]}
-
-    train on n-1 keys, predict on the last,
-    yield result for each
-    '''
-    print "Crosspredict"
-    print "keys : ", keys
-    #print "data ", data
-    trainkeys = ['R009', '23sRNA']
-    mod = make_model(data, trainkeys)
-    print "trainkeys : ", trainkeys
-    for key in data.keys():
-        if (key != "R009") and (key != "23sRNA"):
-            yield key,predict(mod, data[key][1],lambda x: [data[key][2]])
-
-####
-# WHAT IS THIS UNIFORM USED FOR CRAP?
-#####
-def uniform(lower, upper):
-    return uni(lower, upper-lower)
 
 
 

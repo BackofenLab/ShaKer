@@ -8,6 +8,8 @@ from graphlearn01.utils import draw
 import pylab as plt
 import matplotlib.colors as colors
 
+
+
 def annotate(g, shap):
     """ sets the col argument in the nodes of g, accorgin to shape data shap"""
     n = g.nodes()
@@ -36,6 +38,36 @@ def draw_seq_rea(sequence, react, stru=None):
     graph = ss.eden_rna.sequence_dotbracket_to_graph(sequence,brack)
     graph.graph['structure']= brack
     draw3(graph,react)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
