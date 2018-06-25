@@ -24,11 +24,12 @@ def annotate(g, shap):
 def draw3(graph, shape_list):
     '''draws graph len(shape_list) times in a row, colored by shape data'''
     graphs = [annotate(graph.copy(), shape) for shape in shape_list]
-    draw.graphlearn(graphs, size=15, layout="RNA",vertex_color='col', vertex_label='none', edge_alpha=0.05, vertex_size=150,
-                    vertex_border=False, n_graphs_per_line=len(shape_list))
+    draw.graphlearn(graphs, size=15, layout="RNA",vertex_color='col',
+                    vertex_label='none', edge_alpha=0.05, vertex_size=150,
+                    vertex_border=False, n_graphs_per_line=max(len(shape_list),5))
 
 
-def draw_seq_rea(sequence, react, stru=None):
+def draw_seq_rea(sequence, react_list, stru=None):
     ''' given sequence, reactivuty and maybe a structure: draw graph row showing reactivity '''
     if stru != None:
         brack = stru
@@ -37,7 +38,7 @@ def draw_seq_rea(sequence, react, stru=None):
         brack = rna_tools.shape(sequence)[0][0]
     graph = ss.eden_rna.sequence_dotbracket_to_graph(sequence,brack)
     graph.graph['structure']= brack
-    draw3(graph,react)
+    draw3(graph, react_list)
 
 
 
