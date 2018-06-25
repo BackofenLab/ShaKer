@@ -2,17 +2,17 @@ import numpy as np
 from scipy.sparse import vstack
 import eden
 import eden_rna
-import eden.graph as eg
+from eden import graph as eg
 from sklearn.ensemble import RandomForestRegressor
-import rna_tools.rnashapes
 from sklearn.preprocessing import normalize
 import xgboost
 from scipy.stats import uniform as uni
+from rna_tools.rnasubopt import  rnasubopt
 
 from rna_tools.structureprobability import probabilities_of_structures
 
 
-def crosspredict(data, keys, seq_to_db_function=rna_tools.rnashapes.rnashapes):
+def crosspredict(data, keys, seq_to_db_function=rnasubopt):
     '''
     data = {seqname:[shapearray, sequence, structure]}
 
@@ -23,6 +23,7 @@ def crosspredict(data, keys, seq_to_db_function=rna_tools.rnashapes.rnashapes):
         trainkeys = remove(keys, key)
         mod = make_model(data,trainkeys)
         yield predict(mod, data[key][1], seq_to_db_function=seq_to_db_function)
+
 def remove(li, it):
     '''returns copy of li(st) without "it"'''
     li2 = list(li)
@@ -44,9 +45,14 @@ RandomForestRegressor(**{'oob_score': False,
                                              'min_weight_fraction_leaf': 0.02,
                                              'max_features': None}))
 '''
+
+
+
 def make_model( data,
                 sequence_names=[],
-                model= xgboost.XGBRegressor()):
+                model= xgboost.XGBRegressor(
+                    **{'reg_alpha': 0.81547748872761927, 'learning_rate': 0.03, 'max_delta_step': 1, 'min_child_weight': 3, 'n_estimators': 65, 'reg_lambda': 0.93307324674007364, 'max_depth': 14, 'gamma': 0, 'booster': 'gbtree'}
+                )):
     x,y = getXY(data,sequence_names)
     model.fit(x,y)
     return model
@@ -67,7 +73,7 @@ def getXY(data,keys):
     graphs  = map( getgraph, sequence,stru)
 
     # then we edenize
-    x = vstack( eden.graph.vertex_vectorize(graphs,r=3,d=3))
+    x = vstack( eg.vertex_vectorize(graphs,r=3,d=3))
     y= [y for reactlist in react for y in reactlist]
     y= np.array(y)
     # then done
@@ -97,10 +103,8 @@ def weighted_average(weights, react_arrays):
     return sum([ array*weight for array, weight in zip(react_arrays,weights) ])
 
 
-def predict(model, sequence,seq_to_db_function= rna_tools.rnashapes):
-
+def predict(model, sequence,seq_to_db_function= rnasubopt):
     db_list = seq_to_db_function(sequence)
-
     if len(db_list)==1:
         graph = eden_rna.sequence_dotbracket_to_graph(sequence, db_list[0])
         return model.predict(eg.vertex_vectorize([graph])[0])

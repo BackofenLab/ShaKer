@@ -10,19 +10,18 @@ import xgboost
 
 
 def quickladdata():
-    data = rna_io.get_all_data('data/RNA16.react', 'data/RNA16.dbn')
-    data2 = rna_io.get_all_data('data/RNA20.react', 'data/RNA20.dbn')
+    data = rna_io.get_all_data('../data/RNA16.react', '../data/RNA16.dbn')
+    data2 = rna_io.get_all_data('../data/RNA20.react', '../data/RNA20.dbn')
     data.update(data2)
     for e in ['ZHCV', 'Lysine', 'GLYCFN']:
         data.pop(e)
     return data
 
-data= quickladdata()
 
 def uniform(lower, upper):
     return uni(lower, upper-lower)
 
-def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
+def optimize_xgb(data, n_jobs=1, n_iter=10):
     model = xgboost.XGBRegressor()
     param_dist = {
                      'max_depth': [14], # 13 and 14 are bestd
@@ -36,7 +35,7 @@ def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
 'reg_lambda' : uniform(0.6,1)
     }
 
-    X,y = ss.getXY(data,data.keys(),r,d)
+    X,y = ss.getXY(data,data.keys())
     #X = xgboost.DMatrix(X)
     #y= xgboost.DMatrix(y)
     blu = rsearch(model, param_distributions=param_dist, n_iter=n_iter,n_jobs=n_jobs)
@@ -45,5 +44,7 @@ def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
     print blu.best_score_
 
 
-opti_forest(data, n_jobs=24, n_iter=3500)
+if __name__ == '__main__':
+    data= quickladdata()
+    optimize_xgb(data, n_jobs=24, n_iter=3500)
 # BEST {'reg_alpha': 0.81547748872761927, 'learning_rate': 0.03, 'max_delta_step': 1, 'min_child_weight': 3, 'n_estimators': 65, 'reg_lambda': 0.93307324674007364, 'max_depth': 14, 'gamma': 0, 'booster': 'gbtree'}

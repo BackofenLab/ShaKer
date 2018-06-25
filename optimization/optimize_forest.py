@@ -25,7 +25,7 @@ def quickloaddata(dataset='36'):
 
 
 
-def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
+def opti_forest(data, n_jobs=1,n_iter=10):
     model = RandomForestRegressor()
     param_dist = {'n_estimators': rint(15, 30),
                   # 'criterion': ['mse','mae'],  # not in 0.18 but in 0.19
@@ -37,7 +37,7 @@ def opti_forest(data,r=3,d=3, n_jobs=1,n_iter=10):
                   "bootstrap": [True],  # false conflicts with oob score thing
                   "oob_score": [False]}
 
-    X,y = getXY(data,data.keys(),r,d)
+    X,y = getXY(data,data.keys())
     blu = rsearch(model, param_distributions=param_dist, n_iter=n_iter,n_jobs=n_jobs)
     blu.fit(X, y)
     print blu.best_params_
