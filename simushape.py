@@ -105,6 +105,7 @@ def weighted_average(weights, react_arrays):
 
 def predict(model, sequence,seq_to_db_function= rnasubopt):
     db_list = seq_to_db_function(sequence)
+
     if len(db_list)==1:
         graph = eden_rna.sequence_dotbracket_to_graph(sequence, db_list[0])
         return model.predict(eg.vertex_vectorize([graph])[0])

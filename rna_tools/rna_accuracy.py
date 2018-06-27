@@ -1,4 +1,5 @@
 
+import rnaplfold
 import os, re
 import numpy as np
 
@@ -79,17 +80,14 @@ def get_expected_accuracy(reference_struct, dp_matrix):
         return 1
     return (sum_TP_prob/len(reference_struct_dict))
 
-def get_structure_accuracy(dp_ps_files,ref_structures):
-    for dp_ps, ref_struct in zip(dp_ps_files,ref_structures):
-        #print "ref_struct ", ref_struct
-        #print('Compute accuracy for: ', dp_ps, ref_struct)
-        #print "dp_ps ", dp_ps
-        #print "os.path.isfile(dp_ps) ", os.path.isfile(dp_ps)
-        assert(os.path.isfile(dp_ps))
-        dp_matrix = parse_dp_ps(dp_ps)
-        seq_score = get_expected_accuracy(ref_struct, dp_matrix)
-        print "accuracy ", seq_score
-    return seq_score
+def get_structure_accuracy_from_ps_file(dp_ps, ref_struct):
+    assert(os.path.isfile(dp_ps))
+    dp_matrix = parse_dp_ps(dp_ps)
+    print 'matrix dp', sum(dp_matrix)
+    return get_expected_accuracy(ref_struct, dp_matrix)
 
 #get_structure_accuracy(['./notebooks/dot.ps'], ['(((((((..((((........)))).(((((.......))))).....(((((.......))))))))))))....'])
 
+def get_structure_accuracy(sequence,ref_struct, react=None):
+    dpfile,_ = rnaplfold.call_vienna_plfold(sequence, react=react)
+    return get_structure_accuracy_from_ps_file(dpfile, ref_struct=ref_struct)
