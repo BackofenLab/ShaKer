@@ -83,7 +83,6 @@ def get_expected_accuracy(reference_struct, dp_matrix):
 def get_structure_accuracy_from_ps_file(dp_ps, ref_struct):
     assert(os.path.isfile(dp_ps))
     dp_matrix = parse_dp_ps(dp_ps)
-    print 'matrix dp', sum(dp_matrix)
     return get_expected_accuracy(ref_struct, dp_matrix)
 
 #get_structure_accuracy(['./notebooks/dot.ps'], ['(((((((..((((........)))).(((((.......))))).....(((((.......))))))))))))....'])
