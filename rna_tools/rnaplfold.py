@@ -38,7 +38,7 @@ def call_vienna_plfold(sequence, react=None, W=200, L=150):
         assert len(sequence) == len(react), "len seq and len react are not the same %d == %d" %(len(sequence),len(react))
         rna_io.write_shape('tmp.txt', react)
         RNAPLFOLD = 'RNAplfold -W {} -L {} -u 1 --shape tmp.txt --shapeMethod="D"'.format(W, L)  # -u 1 unpaired proba
-    cmd = ('echo  ">%s\\n%s\\n" | ' % (seq_name, sequence))
+    cmd = ('echo  ">%s\n%s\n" | ' % (seq_name, sequence))
     cmd += RNAPLFOLD
 
     ret, error, out =  shexec(cmd)
