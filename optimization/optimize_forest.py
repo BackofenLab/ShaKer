@@ -3,6 +3,8 @@ from scipy.stats import randint as rint
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import RandomizedSearchCV as rsearch
 
+import sys
+sys.path.insert(0,'..')
 from rna_tools import rna_io
 import simushape as ss
 from simushape import getXY
