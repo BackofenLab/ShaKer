@@ -19,10 +19,13 @@ def crosspredict(data, keys, seq_to_db_function=rnasubopt):
     train on n-1 keys, predict on the last,
     yield result for each
     '''
+    print "crosspredict:",
     for key in data.keys():
         trainkeys = remove(keys, key)
         mod = make_model(data,trainkeys)
+        print ".",
         yield predict(mod, data[key][1], seq_to_db_function=seq_to_db_function)
+
 
 def remove(li, it):
     '''returns copy of li(st) without "it"'''

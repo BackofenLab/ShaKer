@@ -33,7 +33,7 @@ def call_vienna_plfold(sequence, react=None, W=200, L=150):
     if react == None:
         RNAPLFOLD = 'RNAplfold -W {} -L {} -u 1'.format(W, L)  # -u 1 for unpaired probablitiy
     else:
-        assert len(sequence) == len(react), "len seq and len react are not the same %d == %d" %(len(sequence),len(react))
+        assert len(sequence) == len(react), "len seq and len react are not the same:seq,rea: %d == %d" %(len(sequence),len(react))
         rna_io.write_shape('tmp.txt', react)
         RNAPLFOLD = 'RNAplfold -W {} -L {} -u 1 --shape tmp.txt --shapeMethod="D"'.format(W, L)  # -u 1 unpaired proba
     cmd = ('echo  ">%s\n%s\n" | ' % (seq_name, sequence))
