@@ -27,7 +27,8 @@ def get_stru_energy(struct, sequence,react=None):
 def energy_to_proba(ensemble,other):
     """use the obvious formula to calculate the probability of a structure given its energy and the energy of the ensemble"""
     RT= 0.61632
-    return math.exp(-other/RT) / math.exp(-ensemble/RT)
+    #return math.exp(-other/RT) / math.exp(-ensemble/RT)
+    return math.exp((-other+ensemble)/RT)  # soheila
 
 
 def probability(structure,seq, react=None):
