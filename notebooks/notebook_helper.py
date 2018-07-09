@@ -41,39 +41,23 @@ def draw_seq_rea(sequence, react_list, stru=None):
     draw3(graph, react_list)
 
 
-def correlationBoxplot(pmfereallist, pmfesimulist, psimureallist, keys, fig_title):     
-       
-    print 
-    print ('*******  ', fig_title, '******* ')
-    print "Results of correlations : ENS&realShape ENS&simu simu&realShape"
-    print
-    #print correlations with RNA names
-    for i, key in enumerate(keys):
-        print "%s\t\t\t%0.2f\t%0.2f\t%0.2f"%(key, pmfereallist[i], pmfesimulist[i], psimureallist[i])
-    corrData = [pmfereallist, pmfesimulist, psimureallist]
-    axis = ['ENS&RealShape', 'ENS&SimuShape', 'SimuShape&RealShape']
-    filesave = "correlation"
-    plt_title = 'Correlations between 2 of 3 ENS, SimuShape, RealShape'
-    boxplotDraw(corrData, axis, plt_title, fig_title, filesave)
-
-def reactivitiesBoxplot(cross_predictions_list, data, keys, fig_title):     
+def reactivitiesBoxplot(cross_predictions_list, data, keys, fig_title, xlabels, label_title, nr=5, nc=3):     
     j=0
     k=0
-    fig, axes = plt.subplots(nrows=5, ncols=3, figsize=(20, 30))
+    fig, axes = plt.subplots(nrows=nr, ncols=nc, figsize=(20, 30))
     for i, key in enumerate(keys):
         if i==0: k=0
         elif (i!=0)&(i%3==0):
             j=j+1
             k=0
         else: k=k+1
-        #print j, k, 'j, k'           
         mydata = [x for x in data[key][0] if x != None]
         #if Sukosd !=None:
             #ddata=[mydata, cross_predictions_list[key]]
         #else: 
         ddata=[mydata, cross_predictions_list[i]]
-        axes[j, k].boxplot(ddata, labels=['RealShape', 'SimuShape'])
-        axes[j, k].set_title('Comparison of SHAPE computed by (' + fig_title + ') for ' + key + 'length of' + str(len(cross_predictions_list[i]))) #Comparison of reactivities of RealShape and SimuShape (computed by ' + fig_title + ') for ' + key
+        axes[j, k].boxplot(ddata, labels = xlabels)
+        axes[j, k].set_title(label_title + '(' + fig_title + ') for ' + key + 'length of' + str(len(cross_predictions_list[i]))) #Comparison of reactivities of RealShape and SimuShape (computed by ' + fig_title + ') for ' + key
     plt.show()
     fig.savefig(fig_title + '-Reactivities.png', bbox_inches='tight')
 
@@ -101,12 +85,6 @@ def boxplotDraw(corrData, axis, plt_title, fig_title, filesave):
         plt.show()
          
 
-def boxplotAccuracy(accuracyShaker, accuracySukosd, fig_title):
-    accuracyData = [accuracyShaker, accuracySukosd]
-    axis = ['accuracyShaker', 'accuracySukosd']
-    plt_title = "Comparison of accuracy"
-    filesave = "Accuracy-Shaker" + fig_title+ "-SukosdMFE"
-    boxplotDraw(accuracyData, axis, plt_title, fig_title, filesave)
 
 
 
