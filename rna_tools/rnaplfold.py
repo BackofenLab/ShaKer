@@ -25,10 +25,8 @@ def call_vienna_plfold(sequence, react=None, W=200, L=150):
     seq_name='plfold'
     dp_file_name = "{}_dp.ps".format(seq_name)
     unp_file_name = "{}_lunp".format(seq_name)
-    #if os.path.isfile(dp_file_name): 
-        #os.remove(dp_file_name) 
-    #if os.path.isfile(unp_file_name): 
-        #os.remove(unp_file_name)
+    if os.path.isfile(dp_file_name): os.remove(dp_file_name) 
+    if os.path.isfile(unp_file_name): os.remove(unp_file_name)
 
     if react == None:
         RNAPLFOLD = 'RNAplfold -W {} -L {} -u 1'.format(W, L)  # -u 1 for unpaired probablitiy
