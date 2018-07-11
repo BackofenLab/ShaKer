@@ -12,6 +12,7 @@ from rna_tools.rnasubopt import  rnasubopt
 from rna_tools.structureprobability import probabilities_of_structures
 
 
+from sklearn.model_selection import KFold
 def make_forestregressor():
     return RandomForestRegressor(**{'oob_score': False,
                                     'min_impurity_split': 0.01,
@@ -21,6 +22,27 @@ def make_forestregressor():
                                     'min_samples_split': 6,
                                     'min_weight_fraction_leaf': 0.02,
                                     'max_features': None})
+
+
+def crosspredict_nfold(data, keys, seq_to_db_function=rnasubopt, n_splits=3):
+    '''
+    data = {seqname:[shapearray, sequence, structure]}
+
+    train on n-1 keys, predict on the last,
+    yield result for each
+    '''
+    print "crosspredict:",
+    res = []
+    kf = KFold(n_splits=n_splits,shuffle=False)
+    for train_n, test_n in kf.split(keys):
+        train_keys = [keys[i] for i in train_n]
+        mod = make_model(data,train_keys)
+        for i in test_n:
+            res.append( predict(mod, data[keys[i]][1], seq_to_db_function=seq_to_db_function))
+            print ".",
+    print "\n"
+    return res
+
 
 
 def crosspredict(data, keys, seq_to_db_function=rnasubopt):
@@ -36,6 +58,8 @@ def crosspredict(data, keys, seq_to_db_function=rnasubopt):
         mod = make_model(data,trainkeys, model= make_forestregressor())
         print ".",
         yield predict(mod, data[key][1], seq_to_db_function=seq_to_db_function)
+
+
 
 
 def remove(li, it):
