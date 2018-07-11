@@ -12,6 +12,17 @@ from rna_tools.rnasubopt import  rnasubopt
 from rna_tools.structureprobability import probabilities_of_structures
 
 
+def make_forestregressor():
+    return RandomForestRegressor(**{'oob_score': False,
+                                    'min_impurity_split': 0.01,
+                                    'bootstrap': True,
+                                    'min_samples_leaf': 1,
+                                    'n_estimators': 16,
+                                    'min_samples_split': 6,
+                                    'min_weight_fraction_leaf': 0.02,
+                                    'max_features': None})
+
+
 def crosspredict(data, keys, seq_to_db_function=rnasubopt):
     '''
     data = {seqname:[shapearray, sequence, structure]}
@@ -20,9 +31,9 @@ def crosspredict(data, keys, seq_to_db_function=rnasubopt):
     yield result for each
     '''
     print "crosspredict:",
-    for key in data.keys():
+    for key in keys:
         trainkeys = remove(keys, key)
-        mod = make_model(data,trainkeys)
+        mod = make_model(data,trainkeys, model= make_forestregressor())
         print ".",
         yield predict(mod, data[key][1], seq_to_db_function=seq_to_db_function)
 
@@ -35,19 +46,6 @@ def remove(li, it):
 
 
 
-
-
-
-''' old model.. 
-RandomForestRegressor(**{'oob_score': False,
-                                             'min_impurity_split': 0.01,
-                                             'bootstrap': True,
-                                             'min_samples_leaf': 1,
-                                             'n_estimators': 16,
-                                             'min_samples_split': 6,
-                                             'min_weight_fraction_leaf': 0.02,
-                                             'max_features': None}))
-'''
 
 
 
