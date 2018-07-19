@@ -27,6 +27,7 @@ def get_stru_energy(struct, sequence,react=None):
 def energy_to_proba(ensemble,other):
     """use the obvious formula to calculate the probability of a structure given its energy and the energy of the ensemble"""
     RT= 0.61632
+    #return math.exp(-other/RT) / math.exp(-ensemble/RT)
     try:
         #res = math.exp(-other/RT) / math.exp(-ensemble/RT)
         res = math.exp((-other+ensemble)/RT)
@@ -40,12 +41,12 @@ def probability(structure,seq, react=None):
     return energy_to_proba(get_ens_energy(seq,react),get_stru_energy(structure,seq,react))
 
 
-def probabilities_of_structures(sequence, structure_list):
+def probabilities_of_structures(sequence, structure_list, react=None):
     """calculate probabilities of structures for a sequence
     returns [(dotbracket,probability),..]
     """
-    ensemble_energy = get_ens_energy(sequence)
-    energies = map(lambda x: get_stru_energy(x, sequence), structure_list)
+    ensemble_energy = get_ens_energy(sequence, react = react)
+    energies = map(lambda x: get_stru_energy(x, sequence, react = react), structure_list)
     probabilities = map(lambda x:energy_to_proba(ensemble_energy, x), energies)
     #probabilities = normalize(probabilities, norm='l1').tolist()[0]
     return [(stru,proba) for stru,proba in zip(structure_list,probabilities)]

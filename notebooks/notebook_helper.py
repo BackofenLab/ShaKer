@@ -4,7 +4,7 @@ import simushape_nostruct  as sn
 import simushape as ss
 import numpy as np
 from graphlearn01.utils import draw
-
+import matplotlib.pyplot as plt
 import pylab as plt
 import matplotlib.colors as colors
 
@@ -41,8 +41,49 @@ def draw_seq_rea(sequence, react_list, stru=None):
     draw3(graph, react_list)
 
 
+def reactivitiesBoxplot(cross_predictions_list, data, keys, fig_title, xlabels, label_title, nr=5, nc=3):     
+    j=0
+    k=0
+    fig, axes = plt.subplots(nrows=nr, ncols=nc, figsize=(20, 30))
+    for i, key in enumerate(keys):
+        if i==0: k=0
+        elif (i!=0)&(i%3==0):
+            j=j+1
+            k=0
+        else: k=k+1
+        mydata = [x for x in data[key][0] if x != None]
+        #if Sukosd !=None:
+            #ddata=[mydata, cross_predictions_list[key]]
+        #else: 
+        ddata=[mydata, cross_predictions_list[i]]
+        axes[j, k].boxplot(ddata, labels = xlabels)
+        axes[j, k].set_title(label_title + '(' + fig_title + ') for ' + key + 'length of' + str(len(cross_predictions_list[i]))) #Comparison of reactivities of RealShape and SimuShape (computed by ' + fig_title + ') for ' + key
+    plt.show()
+    fig.savefig(fig_title + '-Reactivities.png', bbox_inches='tight')
 
-
+def boxplotDraw(corrData, axis, plt_title, fig_title, filesave):
+        fig = plt.figure(figsize=(8,6))
+        ax = fig.add_subplot(1, 1, 1)
+        major_ticks = np.arange(0, 1, 0.05)
+        minor_ticks = np.arange(0, 1, 0.05)
+        ax.set_yticks(major_ticks)
+        ax.set_yticks(minor_ticks, minor=True)
+        # And a corresponding grid
+        ax.grid(which='both')
+        ax.grid(which='minor', alpha=0.2)
+        ax.grid(which='major', alpha=0.2)
+        plt.boxplot(corrData, 0, 'rs', 1)
+        if len(axis) == 2:
+            plt.scatter([1,2], [np.mean(x) for x in corrData] )
+        elif len(axis) == 3: 
+            plt.scatter([1,2,3], [np.mean(x) for x in corrData] )
+        plt.xticks([y+1 for y in range(len(corrData))], axis)
+        plt.xlabel(fig_title)
+        plt.ylim([0, 1])
+        t = plt.title(plt_title)
+        fig.savefig(filesave + '.png', bbox_inches='tight')
+        plt.show()
+         
 
 
 
