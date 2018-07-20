@@ -1,4 +1,10 @@
 import subprocess
+import dill
+
+
+loadfile = lambda filename: dill.load(open(filename, "r"))
+dumpfile = lambda thing, filename: dill.dump(thing, open(filename, "w"))
+
 def shexec(cmd):
     '''
     takes cmd, the command
@@ -8,3 +14,5 @@ def shexec(cmd):
     output, stderr = process.communicate()
     retcode = process.poll()
     return (retcode, stderr, output)
+
+
