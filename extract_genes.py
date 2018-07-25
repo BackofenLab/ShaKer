@@ -1,104 +1,120 @@
-
-
-
+import collections
+path="/home/montaser/ShaKer/data/weeks194_orig/"
+        
+#for genes
 def extractgenes():
-    path="/home/montaser/ShaKer/data/weeks194_orig/"
     endIdxG = 0
     i = 0
-    dbnfileGenes = open(path + "cellfreeGenes.dbn", "w")
+    dbnfileGenes = open(path + "cellfreeGenes.dbn", "w") # we write s.th
+    with open(path + "genes.txt", "r") as g:  # we read something
+        g.next()
+        for e in g:
+            if "," in e:  # all the lines with "," are interesting
+                name, Gstart, Gend, Tstart, Tend, idx =  e.strip().split(',')[0:6]
+                assert (int(Gend) - int(Gstart)) == (int(Tend) - int(Tstart)) 
+                endIdxG, i = extractTranscriptomes(idx, Tstart, Tend, dbnfileGenes, endIdxG, i)
+
+def extractTranscriptomes(idx, Tstart, Tend, dbnfileGenes, endIdxG, i):
+    with open(path + "cellfree.dbn", "r") as D:
+        for d in D:
+            if ">" in d:
+                namesidx = d.strip().split('_')
+                indx = namesidx[len(namesidx)-1]
+                if indx == idx:
+                    i = i + 1
+                    seq = D.next()
+                    if endIdxG == 0:
+                        startIdxT = endIdxG
+                    else: startIdxT = endIdxG + 1
+                    startIdxG = int(Tstart)
+                    endIdxG = int(Tend)
+                    endIdxT = startIdxG
+                    nameT = "T_" + idx + "_" + str(i)
+                    if startIdxT == 0:
+                        text =">%s\n%s\n" % (nameT, seq[startIdxT: endIdxT - 1])
+                    else: text =">%s\n%s\n" % (nameT, seq[startIdxT - 1: endIdxT - 1])
+                    dbnfileGenes.write(text)
+                    if i == len(namesidx) - 1: 
+                        text = ">%s\n%s\n" % ("T_" + idx + "_" + str(i+1), seq[endIdxG: ])
+                        dbnfileGenes.write(text)
+                        endIdxG = 0
+                        i = 0
+                    break
+
+    return (endIdxG, i)
+
+#for reactivities                    
+def extractreacts():
+    endIdxG = 0
+    i = 0
+    l = 0
+    react = ""
+    reactdict = {}
+    dbnfileGenes = open(path + "cellfreereacts.react", "w")
     with open(path + "genes.txt", "r") as g:
         g.next()
         for e in g:
-            print "line in genes"
             if "," in e:
                 data = e.strip().split(',')
-                #print "data ", data
                 name, Gstart, Gend, Tstart, Tend, idx = data[0:6]
-                print "name, Gstart, Gend, Tstart, Tend, idx", name, Gstart, Gend, Tstart, Tend, idx
-                print "idx ", idx
-                if (int(Gend) - int(Gstart)) == (int(Tend) - int(Tstart)):
-                    with open(path + "cellfree.dbn", "r") as D:
-                        for d in D:
-                            if ">" in d:
-                                namesidx = d.strip().split('_')
-                                #print "len(namesidx) ", len(namesidx)
-                                #print "namesidx ", namesidx
-                                indx = namesidx[len(namesidx)-1]
-                                #print "indx ", indx
-                                if indx == idx:
-                                    i = i + 1
-                                    seq = D.next()
-                                    #print "seq", seq
-                                    if endIdxG == 0:
-                                        startIdxT = endIdxG
-                                    else: startIdxT = endIdxG + 1
-                                    #print int(Gstart),int(Tstart)
-                                    startIdxG = int(Tstart)
-                                    #print "startIdxG ", startIdxG
-                                    endIdxG = int(Tend)
-                                    endIdxT = startIdxG
-                                    print "startIdxG,  endIdxG ", startIdxG,  endIdxG
-                                    print "startIdxT,  endIdxT ", startIdxT,  endIdxT
-                                    nameT = "T_" + idx + "_" + str(i)
-                                    text =">%s\n%s\n" % (nameT, seq[startIdxT: endIdxT])
-                                    print "text ", text
-                                    dbnfileGenes.write(text)
-                                    if i == len(namesidx) - 1: 
-                                        text = ">%s\n%s\n" % ("T_" + idx + "_" + str(i+1), seq[endIdxG + 1: ])
-                                        print "text ", text
-                                        dbnfileGenes.write(text)
-                                        endIdxG = 0
-                                        i = 0
-                                    break
-                                #else: 
-                                    #endIdxG = 0
-                                    #i = 0
-                                   
-                                    
+                assert (int(Gend) - int(Gstart)) == (int(Tend) - int(Tstart))
+                l = extractLSeq(idx)
+                endIdxG, i, reactdict = computereact(idx, Tstart, Tend, l, dbnfileGenes, endIdxG, i, reactdict)
+                    
+def extractLSeq(idx):
+    with open(path + "cellfree.dbn", "r") as C:
+        for c in C:
+            if ">" in c:
+                namesidx = c.strip().split('_')
+                indx1 = namesidx[len(namesidx)-1]
+                if indx1 == idx:
+                    seq = C.next()
+                    l =  len(seq)
+    return l  
 
+def computereact(idx, Tstart, Tend, l, dbnfileGenes, endIdxG, i, reactdict):
+    with open(path + "cellfree.react", "r") as D:
+        for d in D:
+            if ">" in d:
+                namesidx = d.strip().split('_')
+                indx = namesidx[len(namesidx)-1]
+                if indx == idx:
+                    i = i + 1
+                    for d in D:
+                        indxreact = d.strip().split(' ')
+                        if ">" not in d:
+                            index, react = indxreact[0:2]
+                            reactdict[int(index)] = react
+                        else: break
+                    reactdict = collections.OrderedDict(sorted(reactdict.items()))
+                    if endIdxG == 0:
+                        startIdxT = endIdxG
+                    else: startIdxT = endIdxG + 1
+                    startIdxG = int(Tstart)
+                    endIdxG = int(Tend)
+                    endIdxT = startIdxG
+                    nameT = "T_" + idx + "_" + str(i)
+                    text1= ""
+                    if startIdxT == 0:
+                        endT = endIdxT - 2
+                    else: endT = endIdxT - 1
 
+                    for k in range (startIdxT - 1, endT):
+                        if startIdxT == 0: 
+                            text1 = text1 + str(k - startIdxT + 2) + " " + reactdict.values()[k + 1] + "\n"
+                        else: text1 = text1 + str(k - startIdxT + 2) + " " + reactdict.values()[k] + "\n"
+                    text =">%s\n%s\n" % (nameT, text1)
+                    dbnfileGenes.write(text)
+                    if i == len(namesidx) - 1: 
+                        text1 = ""
+                        for k in range (endIdxG, l - 1):
+                            text1 = text1 + str(k - endIdxG + 1) + " " + reactdict.values()[k] + "\n"
+                        text = ">%s\n%s\n" % ("T_" + idx + "_" + str(i+1), text1)
+                        dbnfileGenes.write(text)
+                        endIdxG = 0
+                        i = 0
+                    break
 
+    return (endIdxG, i, reactdict)
 
-'''
-        array = []
-        for line in D:
-            array.append(line)
-    l = len(array)
-    str = []
-    for i in range(l):
-        if (i % lSeq) != 0:
-            column = array[i].split()
-            if column[4] == '0':
-                str.append('.')
-            elif int(column[0]) < int(column[4]):
-                str.append('(')
-            else:
-                str.append(')')
-
-
-    filename_to_genname = {}
-    with open(prefix + "transcripts.txt", "r") as f:
-        f.next()  # first line is a table header
-        for e in f:
-            if "," in e:
-                data = e.split(',')
-                idx, _, start, end = data[:4]
-                name = "_".join(data[4:]).strip() + "_" + idx
-                filename_to_genname[start + '-' + end] = name
-
-    transcriptcfile = open(path + "transcript.txt", "r")
-    genesfile = open(path + "genes.txt", "r")
-    dbnfileGenes = open(path + "cellfreeGenes.dbn", "w")
-    dbnfileGenes.write("asd")
-    readallline
-#extract sequences. the structure are computed using RNAfold
-
-def rnastructure_wrap(sequence):
-    filename = 'asdasd.seq'
-    with open(filename, "w") as f:
-        f.write(">asdasd\n%s\n" % sequence)
-    res = rnastructure("asdasd.seq", filename, 'test3.ct')
-    return res
-
-'''
 
