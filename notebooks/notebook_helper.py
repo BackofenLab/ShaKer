@@ -42,6 +42,7 @@ def draw_seq_rea(sequence, react_list, stru=None):
 
 
 def reactivitiesBoxplot(cross_predictions_list, data, keys, fig_title, xlabels, label_title, nr=5, nc=3):     
+    '''i assume that this draws a grid of boxplots.'''
     j=0
     k=0
     fig, axes = plt.subplots(nrows=nr, ncols=nc, figsize=(20, 30))
