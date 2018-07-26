@@ -23,8 +23,12 @@ def make_forestregressor():
                                     'min_weight_fraction_leaf': 0.02,
                                     'max_features': None})
 
+def make_xgbreg():
+    return xgboost.XGBRegressor(
+                    **{'reg_alpha': 0.81547748872761927, 'learning_rate': 0.03, 'max_delta_step': 1, 'min_child_weight': 3, 'n_estimators': 65, 'reg_lambda': 0.93307324674007364, 'max_depth': 14, 'gamma': 0, 'booster': 'gbtree'}
+                )
 
-def crosspredict_nfold(data, keys, seq_to_db_function=rnasubopt, n_splits=3):
+def crosspredict_nfold(data, keys, seq_to_db_function=rnasubopt, n_splits=3, model=make_xgbreg()):
     '''
     data = {seqname:[shapearray, sequence, structure]}
 
@@ -36,7 +40,7 @@ def crosspredict_nfold(data, keys, seq_to_db_function=rnasubopt, n_splits=3):
     kf = KFold(n_splits=n_splits,shuffle=False)
     for train_n, test_n in kf.split(keys):
         train_keys = [keys[i] for i in train_n]
-        mod = make_model(data,train_keys)
+        mod = make_model(data,train_keys, model)
         for i in test_n:
             res.append( predict(mod, data[keys[i]][1], seq_to_db_function=seq_to_db_function))
             print ".",
@@ -75,9 +79,7 @@ def remove(li, it):
 
 def make_model( data,
                 sequence_names=[],
-                model= xgboost.XGBRegressor(
-                    **{'reg_alpha': 0.81547748872761927, 'learning_rate': 0.03, 'max_delta_step': 1, 'min_child_weight': 3, 'n_estimators': 65, 'reg_lambda': 0.93307324674007364, 'max_depth': 14, 'gamma': 0, 'booster': 'gbtree'}
-                )):
+                model= make_xgbreg()):
     x,y = getXY(data,sequence_names)
     model.fit(x,y)
     return model
