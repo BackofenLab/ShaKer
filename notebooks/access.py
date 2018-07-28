@@ -70,11 +70,11 @@ types = ["cellfree",
 def getdata(typ):
     return rio.get_all_data("../data/weeks194_orig/%s.react" % typ,"../data/weeks194_orig/%s.dbn" % typ)  # {key: rea, seq, stru}
 
-def getdata():
-    return rio.get_all_data("../data/RNA16.react"  ,"../data/RNA16.dbn" )  # {key: rea, seq, stru}
+#def getdata():
+#    return rio.get_all_data("../data/RNA16.react"  ,"../data/RNA16.dbn" )  # {key: rea, seq, stru}
 
 #data=getdata(types[1])
-data= getdata()
-keys=data.keys()
+data= getdata("incell_nogenes")
+keys=data.keys()[:9]
 run_access(data,keys)
 
