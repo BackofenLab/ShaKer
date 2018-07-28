@@ -93,3 +93,7 @@ def dump_shape(result, fname):
         for k,v in result.items():
             f.write(format_shape(k, v))
 
+def dump_dbn(name_seq_db_list, fname):
+    textlist = [">%s\n%s\n%s\n\n" % (data[0],data[1],data[2]) for data in name_seq_db_list]
+    res =  ''.join(textlist)
+    with open (fname,'w') as f: f.write(res)
