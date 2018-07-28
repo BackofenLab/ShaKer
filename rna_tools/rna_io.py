@@ -34,7 +34,7 @@ def read_fasta(path):
 
 
 def float_or_none(item):
-    if item == 'NA':
+    if item == 'NA' or item == 'None':
         return None
     return float(item)
 
