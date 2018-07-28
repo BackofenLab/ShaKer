@@ -1,6 +1,6 @@
 import collections
 import sys
-sys.path.insert(0,'../../rna_tools')
+sys.path.insert(0,'../..')
 datapath="/home/ikea/Mustoe2018_data/"
 
 ##################
@@ -9,7 +9,8 @@ datapath="/home/ikea/Mustoe2018_data/"
 
 
 from collections import defaultdict
-import rna_io as rio
+import rna_tools.rna_io as rio
+import rna_tools.rnafold as rf
 
 def read_genes():
     '''return {transcript_id:[(genestart,stop),...]}'''
@@ -51,7 +52,7 @@ def removegenes(gen, dbn, rea, lencutoff=10):
             if len(myseq) > lencutoff:
                 sequencename = "%s_%d" % (seqname, i)
                 res_react[sequencename] = myreact
-                res_dbn.append([sequencename,myseq,'.'*len(myseq)])
+                res_dbn.append([sequencename,myseq,rf.fold(myseq,myreact)])
 
     return res_react, res_dbn
 
@@ -59,14 +60,14 @@ def removegenes(gen, dbn, rea, lencutoff=10):
 # phase 3 dump data 
 ###########################
 
-cdata = 'incell'            
 
-gen = read_genes()
-dbn = read_dbn(cdata+".dbn")
-rea = rio.read_react(cdata+".react")
-react_dict, fasta_list = removegenes(gen,dbn,rea)
-rio.dump_shape(react_dict, cdata+"_nogenes.react")
-rio.dump_dbn(fasta_list, cdata+"_nogenes.dbn")
+for cdata in ['incell','kasugamycin', 'cellfree']:
+    gen = read_genes()
+    dbn = read_dbn(cdata+".dbn")
+    rea = rio.read_react(cdata+".react")
+    react_dict, fasta_list = removegenes(gen,dbn,rea)
+    rio.dump_shape(react_dict, cdata+"_nogenes.react")
+    rio.dump_dbn(fasta_list, cdata+"_nogenes.dbn")
 
 
 
