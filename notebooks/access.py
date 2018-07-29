@@ -61,11 +61,7 @@ def run_access(data, keys,make_model=lambda: ss.make_xgbreg()):
     print asd 
     print asd.to_latex()
 
-# TODO: add 4th
 
-types = ["cellfree",
-"incell",
-"kasugamycin"]
 
 def getdata(typ):
     return rio.get_all_data("../data/weeks194_orig/%s.react" % typ,"../data/weeks194_orig/%s.dbn" % typ)  # {key: rea, seq, stru}
@@ -73,8 +69,28 @@ def getdata(typ):
 #def getdata():
 #    return rio.get_all_data("../data/RNA16.react"  ,"../data/RNA16.dbn" )  # {key: rea, seq, stru}
 
+
+
+types = ["cellfree_nogenes",
+"incell_nogenes",
+"kasugamycin_nogenes"]
+models = [ss.make_forestregressor, ss.make_xgbreg, ss.RandomForestRegressor]
+
+
+tasks = [(ty,mo) for ty in types for mo in models ]
+
 #data=getdata(types[1])
-data= getdata("incell_nogenes")
-keys=data.keys()[:9]
-run_access(data,keys)
+
+def run(id):
+    datum , mod = tasks[id]
+    data= getdata(datum)
+    keys=data.keys()[:9]
+    ret = run_access(data,keys,make_model=mod)
+    with open("%d.access.out" % id, "w") as f: f.write(ret.to_latex())
+
+
+if __name__ == "__main__":
+    import sys
+    run(int(sys.argv[1]))
+
 

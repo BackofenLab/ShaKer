@@ -63,7 +63,7 @@ def run(id):
     data= getdata(datum)
     keys=data.keys()[:9]
     ret = run_accuracy(data,keys,make_model=mod)
-    with open("%d.out" % id, "w") as f: f.write(ret.to_latex())
+    with open("%d.accu.out" % id, "w") as f: f.write(ret.to_latex())
 
 
 if __name__ == "__main__":
