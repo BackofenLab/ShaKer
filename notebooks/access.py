@@ -58,8 +58,7 @@ def run_access(data, keys,make_model=lambda: ss.make_xgbreg()):
     data = [corr_suko,corr_shaker, corr_shaker_str,corr_nodata]
     map(lambda x:x.append(np.mean(x)),data)
     asd = pandas.DataFrame(data, columns=keys+['mean'], index=index).T
-    print asd 
-    print asd.to_latex()
+    return asd
 
 
 
