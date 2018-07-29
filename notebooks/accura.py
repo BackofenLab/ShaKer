@@ -11,7 +11,7 @@ from rna_tools.sukosd import sukosd
 from rna_tools.rna_accuracy import get_structure_accuracy
 
 
-def run_accuracy(data, keys):
+def run_accuracy(data, keys,make_model=lambda: ss.make_xgbreg()):
     # get shaker predictions: 
 
 
@@ -21,8 +21,8 @@ def run_accuracy(data, keys):
 		return [db]
 	print "SHIT"
 
-    predictions = { k:(data[k][1],data[k][2],v) for v,k  in zip(  ss.crosspredict_nfold(data,keys) , keys) }
-    predictions_str = { k:(data[k][1],data[k][2],v) for v,k in zip(  ss.crosspredict_nfold(data,keys,seq_to_db_function=get_str) , keys)}
+    predictions = { k:(data[k][1],data[k][2],v) for v,k  in zip(  ss.crosspredict_nfold(data,keys, model=make_model() ) , keys) }
+    predictions_str = { k:(data[k][1],data[k][2],v) for v,k in zip(  ss.crosspredict_nfold(data,keys,seq_to_db_function=get_str, model=make_model()) , keys)}
 
     acc_shaker = {k: get_structure_accuracy(*predictions[k])  for  k in keys} 
     acc_shaker_plain = {k: get_structure_accuracy(*predictions_str[k]) for  k in keys} 
@@ -35,18 +35,11 @@ def run_accuracy(data, keys):
     data = map(lambda x: [x[k] for k in keys] ,[acc_suko, acc_shaker,acc_shaker_plain, acc_real, acc_noshape])
     map(lambda x:x.append(np.mean(x)),data)
     df = pandas.DataFrame(data, columns=keys+['mean'], index=index).T
-    print df
-    print df.to_latex()
+    return df
 
 
 
 
-
-# TODO: add 4th
-
-types = ["cellfree",
-"incell",
-"kasugamycin"]
 
 def getdata(typ):
     return rio.get_all_data("../data/weeks194_orig/%s.react" % typ,"../data/weeks194_orig/%s.dbn" % typ)  # {key: rea, seq, stru}
@@ -54,8 +47,28 @@ def getdata(typ):
 #def getdata():
 #    return rio.get_all_data("../data/RNA16.react"  ,"../data/RNA16.dbn" )  # {key: rea, seq, stru}
 
+
+types = ["cellfree_nogenes",
+"incell_nogenes",
+"kasugamycin_nogenes"]
+models = [ss.make_forestregressor, ss.make_xgbreg, ss.RandomForestRegressor]
+
+
+tasks = [(ty,mo) for ty in types for mo in models ]
+
 #data=getdata(types[1])
-data= getdata("incell_nogenes")
-keys=data.keys()[:9]
-run_accuracy(data,keys)
+
+def run(id):
+    datum , mod = tasks[id]
+    data= getdata(datum)
+    keys=data.keys()[:9]
+    ret = run_accuracy(data,keys,make_model=mod)
+    with open("%d.out" % id, "w") as f: f.write(ret.to_latex())
+
+
+if __name__ == "__main__":
+    import sys
+    run(int(sys.argv[1]))
+
+
 

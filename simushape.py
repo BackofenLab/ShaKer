@@ -84,6 +84,7 @@ def make_model( data,
     model.fit(x,y)
     return model
 
+
 def mask(x,y):
     mask = np.array([ i for i,e in enumerate(y) if e!=None])
     y= np.array(y)

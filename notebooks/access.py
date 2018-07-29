@@ -27,7 +27,7 @@ def run_access_old(data, keys):
     
 
 
-def run_access(data, keys):
+def run_access(data, keys,make_model=lambda: ss.make_xgbreg()):
     # get shaker predictions: 
 
 
@@ -37,8 +37,8 @@ def run_access(data, keys):
 		return [db]
 	print "SHIT"
 
-    predictions = { k:(data[k][1],v) for v,k  in zip(  ss.crosspredict_nfold(data,keys) , keys) }
-    predictions_str = { k:(data[k][1],v) for v,k in zip(  ss.crosspredict_nfold(data,keys,seq_to_db_function=get_str) , keys)}
+    predictions = { k:(data[k][1],v) for v,k  in zip(  ss.crosspredict_nfold(data,keys,model=make_model()) , keys) }
+    predictions_str = { k:(data[k][1],v) for v,k in zip(  ss.crosspredict_nfold(data,keys,seq_to_db_function=get_str, model=make_model()) , keys)}
     
 
     acc_shaker = {k: rnaplfold(*predictions[k]) for  k in keys} # a predcition is seq,rea
