@@ -6,12 +6,14 @@ import collections
 
 
 from rna_tools import shexec
-
+import tempfile
 
 def rnaplfold(sequence, react=None):
 
     dotplot_file, accessibility_file = call_vienna_plfold(sequence, react)
     result = get_unpaired_probs(accessibility_file)
+    os.remove(dotplot_file)
+    os.remove(accessibility_file)
     return result
 
 
@@ -22,18 +24,20 @@ def call_vienna_plfold(sequence, react=None, W=200, L=150):
            seq_name as string to be used for intermediate and output file names
            :rtype: object
     '''
-    seq_name='plfold'
+    seq_name='%d%s' % (os.getpid() ,next(tempfile._get_candidate_names()))# i hope this is uniquye enough..
     dp_file_name = "{}_dp.ps".format(seq_name)
     unp_file_name = "{}_lunp".format(seq_name)
     if os.path.isfile(dp_file_name): os.remove(dp_file_name) 
     if os.path.isfile(unp_file_name): os.remove(unp_file_name)
 
-    if react == None:
+    if type(react) == type(None):
         RNAPLFOLD = 'RNAplfold -W {} -L {} -u 1'.format(W, L)  # -u 1 for unpaired probablitiy
     else:
         assert len(sequence) == len(react), "len seq and len react are not the same:seq,rea: %d == %d" %(len(sequence),len(react))
-        rna_io.write_shape('tmp.txt', react)
-        RNAPLFOLD = 'RNAplfold -W {} -L {} -u 1 --shape tmp.txt --shapeMethod="D"'.format(W, L)  # -u 1 unpaired proba
+        shapfile = tempfile._get_default_tempdir() + '/' + next(tempfile._get_candidate_names( )) + "shap.tmp"
+
+        rna_io.write_shape(shapfile, react)
+        RNAPLFOLD = 'RNAplfold -W {} -L {} -u 1 --shape {} --shapeMethod="D"'.format(W, L, shapfile)  # -u 1 unpaired proba
     cmd = ('echo  ">%s\n%s\n" | ' % (seq_name, sequence))
     cmd += RNAPLFOLD
 

@@ -2,13 +2,16 @@ import rna_io
 from rna_tools import shexec
 import re
 import math
+
+import tempfile
 def get_ens_energy(seq,react=None):
     '''calculate  ensemble energy'''
     if react==None:
-        retcode,err,out = shexec("echo %s | RNAfold -p0" % seq)
+        retcode,err,out = shexec("echo %s | RNAfold --noPS -p0" % seq)
     else:
-        rna_io.write_shape('tmp.react', react)
-        retcode,err,out = shexec("echo %s | RNAfold --shape tmp.react -p0" % seq)
+        fname = tempfile._get_default_tempdir() + '/' + next(tempfile._get_candidate_names()) + "rea.tmp"
+        rna_io.write_shape(fname, react)
+        retcode,err,out = shexec("echo %s | RNAfold --noPS --shape %s -p0" % (seq,fname))
     # a float followed by kcal/mol
     return float(  re.findall( r"([-+]?[0-9]*\.?[0-9]+) kcal/mol",out )[0] )
 
@@ -18,8 +21,9 @@ def get_stru_energy(struct, sequence,react=None):
     if react == None:
         cmd = "echo \"%s\n%s\" | RNAeval" % (sequence,struct)
     else:
-        rna_io.write_shape('tmp.react', react)
-        cmd = "echo \"%s\n%s\" | RNAeval --shape tmp.react" % (sequence,struct)
+        fname = tempfile._get_default_tempdir() + '/' + next(tempfile._get_candidate_names()) + "rea.tmp"
+        rna_io.write_shape(fname, react)
+        cmd = "echo \"%s\n%s\" | RNAeval --shape %s" % (sequence,struct,fname)
     retcode,err,out = shexec(cmd)
     return float(re.findall(r"[-+]?[0-9]*\.?[0-9]+",out)[0])
 

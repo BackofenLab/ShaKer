@@ -89,4 +89,7 @@ def get_structure_accuracy_from_ps_file(dp_ps, ref_struct):
 
 def get_structure_accuracy(sequence,ref_struct, react=None):
     dpfile,_ = rnaplfold.call_vienna_plfold(sequence, react=react)
-    return get_structure_accuracy_from_ps_file(dpfile, ref_struct=ref_struct)
+    res= get_structure_accuracy_from_ps_file(dpfile, ref_struct=ref_struct)
+    os.remove(dpfile)
+    os.remove(_)
+    return res

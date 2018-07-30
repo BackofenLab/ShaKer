@@ -1,6 +1,7 @@
 from rna_tools import shexec
 
 # this wraps the tool: rnastructure by soheila montaseri
+# lol what is this???
 
 def rnastructure_wrap(sequence):
     filename = 'asdasd.seq'

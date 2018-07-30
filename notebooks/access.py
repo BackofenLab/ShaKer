@@ -2,6 +2,7 @@ import sys
 sys.path.insert(0,'..')
 import simushape as ss 
 from scipy.stats import spearmanr as spear
+from scipy.stats import pearsonr as pear
 import pandas
 import numpy as np
 from rna_tools.rnaplfold import rnaplfold
@@ -47,18 +48,26 @@ def run_access(data, keys,make_model=lambda: ss.make_xgbreg()):
     acc_suko =   {k: rnaplfold(data[k][1], sukosd(data[k][2]) ) for  k in keys}
     acc_shape =  {k: rnaplfold(data[k][1],data[k][0]) for  k in keys}  
     acc_nodata = {k: rnaplfold(data[k][1]) for  k in keys}
-    corr = lambda ac1, ac2:[spear(ac1[k], ac2[k])[0] for k in keys]
-    corr_suko =  corr(acc_suko, acc_shape)
-    corr_shaker =  corr(acc_shaker, acc_shape)
-    corr_shaker_str =  corr(acc_shaker_str, acc_shape)
-    corr_nodata =  corr(acc_nodata, acc_shape)
 
-
+    access_data = [acc_suko,acc_shaker, acc_shaker_str, acc_nodata]
     index= ['suko',"shaker","shaker_str","nodata"]
-    data = [corr_suko,corr_shaker, corr_shaker_str,corr_nodata]
-    map(lambda x:x.append(np.mean(x)),data)
-    asd = pandas.DataFrame(data, columns=keys+['mean'], index=index).T
-    return asd
+
+    corr_spear = lambda ac1:[spear(ac1[k], acc_shape[k])[0] for k in keys]
+    corr_pear = lambda ac1:[pear(ac1[k], acc_shape[k])[0] for k in keys]
+
+    data_spear = map(corr_spear, access_data)
+    data_pear = map(corr_pear, access_data)
+
+
+    ress = map(lambda x:np.mean(x),data_spear)
+    resp=  map(lambda x:np.mean(x),data_pear)
+
+    print ress, resp 
+    return "{},spear {} , pear {}".format(index,ress ,resp)
+
+    #map(lambda x:x.append(np.mean(x)),data)
+    #asd = pandas.DataFrame(data, columns=keys+['mean'], index=index).T
+    #return asd
 
 
 
@@ -85,7 +94,7 @@ def run(id):
     data= getdata(datum)
     keys=data.keys()[:9]
     ret = run_access(data,keys,make_model=mod)
-    with open("%d.access.out" % id, "w") as f: f.write(ret.to_latex())
+    with open("%d.access.out" % id, "w") as f: f.write(ret)
 
 
 if __name__ == "__main__":
