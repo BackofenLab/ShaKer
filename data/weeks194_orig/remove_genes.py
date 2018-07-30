@@ -56,11 +56,39 @@ def removegenes(gen, dbn, rea, lencutoff=10):
 
     return res_react, res_dbn
 
+def keepgenes(gen, dbn, rea, lencutoff=10):
+    ''' returns {seqname:react} and [seqname, seq]'''
+    res_react = {}
+    res_dbn = []
+    k=gen.keys()
+    k.sort()
+    for kk, (seqname,seq,_) in zip (k,dbn): # for all transcripts
+        genelocations = gen[kk] # fake gene for edge case
+        react = rea[seqname]
+        for i, (start, stop )in enumerate(genelocations): # for all genes
+            myreact = react[start:stop+1]
+            myseq = seq[start:stop+1]
+            if len(myseq) > lencutoff:
+                sequencename = "%s_%d" % (seqname, i)
+                res_react[sequencename] = myreact
+                res_dbn.append([sequencename,myseq,rf.fold(myseq,myreact)])
+
+    return res_react, res_dbn
+
+
 ##############################
 # phase 3 dump data 
 ###########################
 
 
+for cdata in ['incell','kasugamycin', 'cellfree']:
+    gen = read_genes()
+    dbn = read_dbn(cdata+".dbn")
+    rea = rio.read_react(cdata+".react")
+    react_dict, fasta_list = keepgenes(gen,dbn,rea)
+    rio.dump_shape(react_dict, cdata+"_genes.react")
+    rio.dump_dbn(fasta_list, cdata+"_genes.dbn")
+exit()
 for cdata in ['incell','kasugamycin', 'cellfree']:
     gen = read_genes()
     dbn = read_dbn(cdata+".dbn")
