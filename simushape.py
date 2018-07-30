@@ -127,6 +127,7 @@ def weighted_average(weights, react_arrays):
     print d
     print sum(d)
     '''
+    weights = np.reshape(weights, (1,-1))
     weights = normalize(weights, norm='l1').tolist()[0]
     return sum([ array*weight for array, weight in zip(react_arrays,weights) ])
 
