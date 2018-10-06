@@ -57,6 +57,7 @@ def dump_shape(shape,fname):
     dataz = map(fix_data, shape)
     textlist = [">%s\n%s\n\n" % (name,data)  for (name,data) in zip(fnames,dataz)]
     res = ''.join(textlist)
+    res = res.replace("-999","NA")
     dump("data.react",res)
     print res
 
