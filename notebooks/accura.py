@@ -48,9 +48,9 @@ def getdata(typ):
 #    return rio.get_all_data("../data/RNA16.react"  ,"../data/RNA16.dbn" )  # {key: rea, seq, stru}
 
 
-types = ["cellfree_nogenes",
-"incell_nogenes",
-"kasugamycin_nogenes"]
+types = ["cellfree_genes",
+"incell_genes",
+"kasugamycin_genes"]
 models = [ss.make_forestregressor, ss.make_xgbreg, ss.RandomForestRegressor]
 
 

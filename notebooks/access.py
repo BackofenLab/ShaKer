@@ -63,7 +63,7 @@ def run_access(data, keys,make_model=lambda: ss.make_xgbreg()):
     resp=  map(lambda x:np.mean(x),data_pear)
 
     print ress, resp 
-    return "{},spear {} , pear {}".format(index,ress ,resp)
+    return "{}\n{} spear\n{} pear".format(index,ress ,resp)
 
     #map(lambda x:x.append(np.mean(x)),data)
     #asd = pandas.DataFrame(data, columns=keys+['mean'], index=index).T
@@ -79,9 +79,9 @@ def getdata(typ):
 
 
 
-types = ["cellfree_nogenes",
-"incell_nogenes",
-"kasugamycin_nogenes"]
+types = ["cellfree_genes",
+"incell_genes",
+"kasugamycin_genes"]
 models = [ss.make_forestregressor, ss.make_xgbreg, ss.RandomForestRegressor]
 
 
