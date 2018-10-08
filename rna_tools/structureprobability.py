@@ -6,7 +6,7 @@ import math
 import tempfile
 def get_ens_energy(seq,react=None):
     '''calculate  ensemble energy'''
-    if react==None:
+    if type( react) == type(None):
         retcode,err,out = shexec("echo %s | RNAfold --noPS -p0" % seq)
     else:
         fname = tempfile._get_default_tempdir() + '/' + next(tempfile._get_candidate_names()) + "rea.tmp"
@@ -18,7 +18,7 @@ def get_ens_energy(seq,react=None):
 
 def get_stru_energy(struct, sequence,react=None):
     """calculate energy of a structure"""
-    if react == None:
+    if type( react) == type(None):
         cmd = "echo \"%s\n%s\" | RNAeval" % (sequence,struct)
     else:
         fname = tempfile._get_default_tempdir() + '/' + next(tempfile._get_candidate_names()) + "rea.tmp"
