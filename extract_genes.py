@@ -5,7 +5,7 @@ path="/home/montaser/ShaKer/data/weeks194_orig/"
 def extractgenes():
     endIdxG = 0 
     i = 0
-    filew = openfile("cellfreeGenes.dbn", "w")
+    filew = openfile("kasugamycinGenes.dbn", "w")
     filer = openfile("genes.txt", "r")
     extractfilerInfo(filer, filew, endIdxG, i)# extract information from read file
                 
@@ -30,7 +30,7 @@ def extractfilerInfo(filer, filew, endIdxG, i, reactdict = None):
 def extractTranscriptomes(idx, Tstart, Tend, filew, endIdxG, i):
     cutoff = 20
     structure = ""
-    filer = openfile("cellfree.dbn", "r")
+    filer = openfile("kasugamycin.dbn", "r")
     with filer as D:
         for d in D:
             if ">" in d: 
@@ -72,13 +72,13 @@ def extractreacts():
     l = 0
     react = ""
     reactdict = {}
-    filew = openfile("cellfreereacts.react", "w")
+    filew = openfile("kasugamycinreacts.react", "w")
     filer = openfile("genes.txt", "r")
     extractfilerInfo(filer, filew, endIdxG, i, reactdict)# extract information from read file
                  
                     
 def extractLSeq(idx):
-    with open(path + "cellfree.dbn", "r") as C:
+    with open(path + "kasugamycin.dbn", "r") as C:
         for c in C:
             if ">" in c:
                 namesidx = c.strip().split('_')
@@ -90,7 +90,7 @@ def extractLSeq(idx):
 
 def computereact(idx, Tstart, Tend, l, filew, endIdxG, i, reactdict):
     cutoff = 20
-    filer = openfile("cellfree.react", "r")
+    filer = openfile("kasugamycin.react", "r")
     with filer as D:
         for d in D:
             if ">" in d:
