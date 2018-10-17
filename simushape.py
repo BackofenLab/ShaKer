@@ -10,6 +10,7 @@ from scipy.stats import uniform as uni
 from rna_tools.rnasubopt import  rnasubopt
 
 from rna_tools.structureprobability import probabilities_of_structures
+from rna_tools.sukosd import sukosd
 
 
 from sklearn.model_selection import KFold
@@ -150,6 +151,14 @@ def predict(model, sequence,seq_to_db_function= rnasubopt):
 
     # mix reactivity with probabilities
     return weighted_average(weights, predictions_all_structures)
+
+
+def predict_Suko(sequence,seq_to_db_function= rnasubopt):
+    db_list = seq_to_db_function(sequence)
+    struct_proba = probabilities_of_structures(sequence, db_list)
+    structures, weights = zip(*struct_proba)
+    shapes_Suko = [sukosd(x) for x in db_list]
+    return weighted_average(weights, shapes_Suko)
 
 
 
