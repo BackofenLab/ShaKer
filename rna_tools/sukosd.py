@@ -2,6 +2,9 @@ import os
 import random
 from math import exp, pow, sqrt, fabs
 import numpy as np
+import simushape 
+from rna_tools.rnasubopt import  rnasubopt
+
 # hacked version of sukosds SHAPE simulation method
 # http://users-birc.au.dk/zs/SHAPEsimulations/ 
 
@@ -116,6 +119,15 @@ def sukosd(dotbracket):
                     o = 0;
             data.append( generateValue(real_pairing[i],m,o))
     return np.array(data)
+
+
+def predict_Suko(sequence,seq_to_db_function= rnasubopt):
+    db_list = seq_to_db_function(sequence)
+    struct_proba = simushape.probabilities_of_structures(sequence, db_list)
+    structures, weights = zip(*struct_proba)
+    shapes_Suko = [sukosd(x) for x in db_list]
+    return simushape.weighted_average(weights, shapes_Suko)
+
 
 
 
