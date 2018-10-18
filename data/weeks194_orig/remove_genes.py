@@ -80,22 +80,22 @@ def keepgenes(gen, dbn, rea, lencutoff=10):
 # phase 3 dump data 
 ###########################
 
-
-for cdata in ['incell','kasugamycin', 'cellfree']:
-    gen = read_genes()
-    dbn = read_dbn(cdata+".dbn")
-    rea = rio.read_react(cdata+".react")
-    react_dict, fasta_list = keepgenes(gen,dbn,rea)
-    rio.dump_shape(react_dict, cdata+"_genes.react")
-    rio.dump_dbn(fasta_list, cdata+"_genes.dbn")
-exit()
-for cdata in ['incell','kasugamycin', 'cellfree']:
-    gen = read_genes()
-    dbn = read_dbn(cdata+".dbn")
-    rea = rio.read_react(cdata+".react")
-    react_dict, fasta_list = removegenes(gen,dbn,rea)
-    rio.dump_shape(react_dict, cdata+"_nogenes.react")
-    rio.dump_dbn(fasta_list, cdata+"_nogenes.dbn")
+if __name__== "__main__":
+    for cdata in ['incell','kasugamycin', 'cellfree']:
+        gen = read_genes()
+        dbn = read_dbn(cdata+".dbn")
+        rea = rio.read_react(cdata+".react")
+        react_dict, fasta_list = keepgenes(gen,dbn,rea)
+        rio.dump_shape(react_dict, cdata+"_genes.react")
+        rio.dump_dbn(fasta_list, cdata+"_genes.dbn")
+    exit()
+    for cdata in ['incell','kasugamycin', 'cellfree']:
+        gen = read_genes()
+        dbn = read_dbn(cdata+".dbn")
+        rea = rio.read_react(cdata+".react")
+        react_dict, fasta_list = removegenes(gen,dbn,rea)
+        rio.dump_shape(react_dict, cdata+"_nogenes.react")
+        rio.dump_dbn(fasta_list, cdata+"_nogenes.dbn")
 
 
 

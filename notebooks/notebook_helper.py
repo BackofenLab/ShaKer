@@ -1,6 +1,5 @@
 from rna_tools import rna_io
 import rna_tools
-import simushape_nostruct  as sn
 import simushape as ss
 import numpy as np
 from graphlearn01.utils import draw
@@ -84,16 +83,24 @@ def boxplotDraw(corrData, axis, plt_title, fig_title, filesave):
         t = plt.title(plt_title)
         fig.savefig(filesave + '.png', bbox_inches='tight')
         plt.show()
-         
+
+import data.weeks194_orig.remove_genes as d
 
 
+def getgenedict():
+    return d.read_genes()
 
+def get_genetrack(sequencename, data, genestartdict, low=0.1, high = 0.2):
+    # name is not understood by the genedirectory
+    index = int(sequencename.split("_")[-1])
+    length = len(data[sequencename][1])
+    genes = genestartdict[index]
 
-
-
-
-
-
+    genetrack = [low]*length
+    for start, end in genes:
+        for e in range(start,end):
+            genetrack[e] = high
+    return genetrack
 
 
 

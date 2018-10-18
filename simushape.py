@@ -15,7 +15,7 @@ from rna_tools.structureprobability import probabilities_of_structures
 from sklearn.model_selection import KFold
 def make_forestregressor():
     return RandomForestRegressor(**{'oob_score': False,
-                                    'min_impurity_split': 0.01,
+                                    'min_impurity_decrease': 0.01,
                                     'bootstrap': True,
                                     'min_samples_leaf': 1,
                                     'n_estimators': 16,
