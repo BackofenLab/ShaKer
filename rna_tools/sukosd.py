@@ -130,5 +130,12 @@ def predict_Suko(sequence,seq_to_db_function= rnasubopt):
 
 
 
+def predict_tmp(sequence,seq_to_db_function= rnasubopt):
+    db_list = seq_to_db_function(sequence)
+    struct_proba = simushape.probabilities_of_structures(sequence, db_list)
+    structures, weights = zip(*struct_proba)
+    shapes = [ np.array([ 1.0 if chr == "." else 0.0 for chr in x ]) for x in db_list]
+    return simushape.weighted_average(weights, shapes)
+
 
 
