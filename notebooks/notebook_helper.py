@@ -90,6 +90,11 @@ import data.weeks194_orig.remove_genes as d
 def getgenedict():
     return d.read_genes()
 
+
+
+
+
+
 def get_genetrack(sequencename, data, genestartdict, low=0.1, high = 0.2):
     # name is not understood by the genedirectory
     index = int(sequencename.split("_")[-1])
@@ -98,12 +103,41 @@ def get_genetrack(sequencename, data, genestartdict, low=0.1, high = 0.2):
 
     genetrack = [low]*length
     for start, end in genes:
+        print start,end
         for e in range(start,end):
             genetrack[e] = high
     return genetrack
 
 
 
+def get_genetrack_multigene(sequencename, data, genestartdict, drawindex=(0,600), low=0.1, high = 0.1):
+    # returns genenames for the legend, value arrays for the line plot
+
+
+
+    # get gene location list
+    index = int(sequencename.split("_")[-1])
+    length = len(data[sequencename][1])
+    genes = genestartdict[index]
+
+    # get  gene name ist
+    names = sequencename.split("_")[:-1]
+    relevant_names = []
+
+    # background
+    genetrack = []
+
+    for (start,end),name in zip(genes,names):
+        if end < drawindex[0] or start > drawindex[1]:
+            continue
+        nutrack = [np.nan]*length
+        for e in range(start,end):
+            nutrack[e]=high
+        genetrack.append(nutrack[drawindex[0]:drawindex[1]])
+
+        relevant_names.append("Gene: "+name)
+
+    return relevant_names, genetrack
 
 
 
