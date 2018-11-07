@@ -1,4 +1,4 @@
-from rna_tools import shexec
+from util import shexec
 import re
 
 

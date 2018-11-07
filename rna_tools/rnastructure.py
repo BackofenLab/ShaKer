@@ -1,4 +1,5 @@
-from rna_tools import shexec
+from util import shexec
+
 
 # this wraps the tool: rnastructure by soheila montaseri
 # lol what is this???

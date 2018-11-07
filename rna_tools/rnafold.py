@@ -1,6 +1,5 @@
 import rna_io
-from rna_tools import shexec
-
+from util import shexec
 
 import tempfile
 

@@ -2,10 +2,7 @@ import rna_io
 import os
 import collections
 
-
-
-
-from rna_tools import shexec
+from util import shexec
 import tempfile
 
 def rnaplfold(sequence, react=None):
