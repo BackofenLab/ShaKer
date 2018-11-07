@@ -7,7 +7,7 @@ import tempfile
 
 def fold(sequence,react = None, return_dotplot= False):
     """call rna fold, return dotbracket string"""
-    if react==None:
+    if type(react)==type(None):
         cmd = 'echo "%s" | RNAfold --noPS '  % sequence
     else:
         tmpname = tempfile._get_default_tempdir()+'/'+next(tempfile._get_candidate_names()) + "shap.tmp"

@@ -110,7 +110,7 @@ def get_genetrack(sequencename, data, genestartdict, low=0.1, high = 0.2):
 
 
 
-def get_genetrack_multigene(sequencename, data, genestartdict, drawindex=(0,600), low=0.1, high = 0.1):
+def get_genetrack_multigene(sequencename, data, genestartdict, drawindex=(0,9999999), low=0.1, high = 0.1):
     # returns genenames for the legend, value arrays for the line plot
 
 
