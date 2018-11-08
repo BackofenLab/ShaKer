@@ -9,8 +9,8 @@ datapath="/home/ikea/Mustoe2018_data/"
 
 
 from collections import defaultdict
-import rna_tools.rna_io as rio
-import rna_tools.rnafold as rf
+import ShaKer.rna_tools.rna_io as rio
+import ShaKer.rna_tools.rnafold as rf
 
 def read_genes():
     '''return {transcript_id:[(genestart,stop),...]}'''

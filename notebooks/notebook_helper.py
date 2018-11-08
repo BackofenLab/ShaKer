@@ -1,12 +1,15 @@
-from rna_tools import rna_io
-import rna_tools
-import simushape as ss
+import ShaKer.rna_tools
+import ShaKer.simushape as ss
 import numpy as np
 from graphlearn01.utils import draw
 import matplotlib.pyplot as plt
 import pylab as plt
 import matplotlib.colors as colors
 
+
+import ShaKer.data.weeks194_orig.remove_genes as d
+def getgenedict():
+    return d.read_genes()
 
 
 def annotate(g, shap):
@@ -84,11 +87,6 @@ def boxplotDraw(corrData, axis, plt_title, fig_title, filesave):
         fig.savefig(filesave + '.png', bbox_inches='tight')
         plt.show()
 
-import data.weeks194_orig.remove_genes as d
-
-
-def getgenedict():
-    return d.read_genes()
 
 
 

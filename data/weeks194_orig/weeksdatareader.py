@@ -3,7 +3,7 @@
 
 import sys
 sys.path.append("../..")
-import rna_tools.rnafold
+import ShaKer.rna_tools.rnafold
 from rna_tools import rna_io
 import collections
 
