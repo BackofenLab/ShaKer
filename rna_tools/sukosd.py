@@ -2,8 +2,8 @@ import os
 import random
 from math import exp, pow, sqrt, fabs
 import numpy as np
-import simushape 
-from rna_tools.rnasubopt import  rnasubopt
+import ShaKer.simushape
+from ShaKer.rna_tools.rnasubopt import  rnasubopt
 
 # hacked version of sukosds SHAPE simulation method
 # http://users-birc.au.dk/zs/SHAPEsimulations/ 
