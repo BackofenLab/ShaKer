@@ -6,9 +6,9 @@ from sklearn.model_selection import RandomizedSearchCV as rsearch
 import sys
 sys.path.insert(0,'..')
 from rna_tools import rna_io
-import simushape as ss
-from simushape import getXY
-from rna_tools.rna_io import get_all_data
+import ShaKer.simushape as ss
+from ShaKer.simushape import getXY
+from ShaKer.rna_tools.rna_io import get_all_data
 
 
 def quickloaddata(dataset='36'):

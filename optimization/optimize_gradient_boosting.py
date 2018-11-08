@@ -4,8 +4,8 @@ from scipy.stats import uniform as uni
 #from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import RandomizedSearchCV as rsearch
 
-from rna_tools import rna_io
-import simushape as ss
+from ShaKer.rna_tools import rna_io
+import ShaKer.simushape as ss
 import xgboost
 
 

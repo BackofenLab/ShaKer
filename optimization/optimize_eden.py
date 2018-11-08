@@ -5,7 +5,7 @@ from scipy.stats import spearmanr as corr
 import eden_rna
 from sklearn.ensemble import RandomForestRegressor
 
-from simushape import make_model, predict, mask
+from ShaKer.simushape import make_model, predict, mask
 
 
 def remove(li, it):
