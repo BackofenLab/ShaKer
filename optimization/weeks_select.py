@@ -1,5 +1,6 @@
 import ShaKer.simushape as sim
 import ShaKer.rna_tools.rna_io as rio
+import ShaKer.rna_tools.util as util
 
 types = ["cellfree",
 "incell",
@@ -11,19 +12,9 @@ def getdata(typ):
 typee = 'incell'
 data= getdata(typee)
 
-keys = data.keys()[:3] # 9 for testing
+keys = data.keys()# 3 for testing
 res = sim.crosspredict_nfold(data, keys,model=sim.make_xgbreg())
 
+res = dict(zip(keys,res))
+rio.dump_shape(res,"%s_predicted.react" % typee)
 
-from scipy.stats import spearmanr as spear
-import numpy as np
-
-def compare(pred, dat):
-    relevant = np.array(dat)!=None
-    return spear(np.array(pred)[relevant], np.array(dat)[relevant]) 
-
-for a,b in zip(keys, res):
-    print a, compare(b,data[a][0])
-
-
-print data[a][0]
