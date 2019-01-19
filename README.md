@@ -17,6 +17,7 @@ sim.predict(model,"AAAAAAGGGGCCCCCCCGGGGGUUUUUU")
 
 ```
 
+### Installation
 
 ```fish
 # get vienna RNA:
@@ -31,6 +32,6 @@ pip install git+https://github.com/smautner/EDeN.git --user
 
 # also clone shaker and put it in your python path 
 git clone https://github.com/smautner/ShaKer 
-set -x PYTHONPATH . 
+set -x PYTHONPATH .  # (this is the fish shell command to set a variable)
 ```
 
