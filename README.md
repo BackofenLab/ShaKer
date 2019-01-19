@@ -16,3 +16,21 @@ model  = sim.make_model(data,data.keys())
 sim.predict(model,"AAAAAAGGGGCCCCCCCGGGGGUUUUUU")
 
 ```
+
+
+```fish
+# get vienna RNA:
+conda config --add channels defaults
+conda config --add channels bioconda
+conda config --add channels conda-forge
+conda install viennarna
+
+# this will take care of most of the python dependencies:
+pip install graphlearn xgboost
+pip install git+https://github.com/smautner/EDeN.git --user 
+
+# also clone shaker and put it in your python path 
+git clone https://github.com/smautner/ShaKer 
+set -x PYTHONPATH . 
+```
+

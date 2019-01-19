@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.sparse import vstack
 import eden
-import eden_rna
+import rna_tools.util as util
 from eden import graph as eg
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import normalize
@@ -112,7 +112,7 @@ def getXY(data,keys):
 
 def getgraph(sequence,structure):
     """returns networkx graph"""
-    return eden_rna.sequence_dotbracket_to_graph(sequence,structure)
+    return util.sequence_dotbracket_to_graph(sequence,structure)
 
 
 
@@ -136,7 +136,7 @@ def predict(model, sequence,seq_to_db_function= rnasubopt):
     db_list = seq_to_db_function(sequence)
 
     if len(db_list)==1:
-        graph = eden_rna.sequence_dotbracket_to_graph(sequence, db_list[0])
+        graph = util.sequence_dotbracket_to_graph(sequence, db_list[0])
         return model.predict(eg.vertex_vectorize([graph])[0])
 
     # get probability for each structure

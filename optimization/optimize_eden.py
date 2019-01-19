@@ -2,7 +2,7 @@ import multiprocessing as mp
 import numpy as np
 from scipy.stats import spearmanr as corr
 
-import eden_rna
+import Shaker.rna_tools.util as util
 from sklearn.ensemble import RandomForestRegressor
 
 from ShaKer.simushape import make_model, predict, mask
@@ -16,7 +16,7 @@ def remove(li, it):
 
 def calc(names,data, item,r,d,model=RandomForestRegressor()):
     model = make_model(data,names,False,r,d, model)
-    graph = eden_rna.sequence_dotbracket_to_graph(data[item][1],data[item][2])
+    graph = util.sequence_dotbracket_to_graph(data[item][1],data[item][2])
     res = np.array(predict(model,graph))
     other = np.array(data[item][0])
 
