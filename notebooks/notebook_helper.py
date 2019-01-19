@@ -15,7 +15,7 @@ def getgenedict():
 
 def annotate(g, shap):
     """ sets the col argument in the nodes of g, accorgin to shape data shap"""
-    n = g.nodes()
+    n = list(g.nodes())
     n.sort()
     cm= plt.get_cmap("viridis")
     for e, i in zip(n, shap):
