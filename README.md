@@ -27,7 +27,7 @@ conda config --add channels conda-forge
 conda install viennarna
 
 # python dependencies:
-pip install graphlearn xgboost
+pip install graphlearn xgboost seaborn tabulate
 pip install git+https://github.com/smautner/EDeN.git --user 
 
 # clone shaker and put it in your python path:
@@ -37,12 +37,9 @@ set -x PYTHONPATH .  # (this is the fish shell command to set a variable)
 git clone https://github.com/smautner/ShaKer ~/.local/lib/python2.7/site-packages/ShaKer
 ```
 
-#### To run the notebooks you will also need 
+#### To run the notebooks you will also need:
 
 ```fish
 # mustoe data set
 www.chem.unc.edu/rna/data-files/mustoe_2018_DATA_SOFTWARE.zip 
-
-# mote python packages
-pip install seaborn tabulate
 ```
