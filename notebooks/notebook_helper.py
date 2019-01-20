@@ -5,8 +5,7 @@ from graphlearn01.utils import draw
 import matplotlib.pyplot as plt
 import pylab as plt
 import matplotlib.colors as colors
-
-
+import ShaKer.rna_tools.rnafold as rnafold
 import ShaKer.data.weeks194_orig.remove_genes as d
 def getgenedict():
     return d.read_genes()
@@ -23,15 +22,32 @@ def annotate(g, shap):
     return g
 
 
-def draw3(graph, shape_list):
+import eden.display as ed
+def draw_print(seq, shape, file_name= 'lol.svg',stru=None):
+    '''seq+shape => image'''
+    if stru != None:
+        brack = stru
+    else:
+        brack = rnafold.fold(seq)
+
+    graph = ss.eden_rna.sequence_dotbracket_to_graph(seq,brack)
+    graph.graph['structure']= brack
+    graph = annotate(graph.copy(), shape)
+
+    ed.draw_graph(graph, size=5, layout="RNA",vertex_color='col',
+                    vertex_label=None, edge_alpha=0.4, vertex_size=150,
+                    vertex_border=False, file_name=file_name)
+
+
+def draw3(graph, shape_list, **kwargs):
     '''draws graph len(shape_list) times in a row, colored by shape data'''
     graphs = [annotate(graph.copy(), shape) for shape in shape_list]
     draw.graphlearn(graphs, size=15, layout="RNA",vertex_color='col',
                     vertex_label='none', edge_alpha=0.05, vertex_size=150,
-                    vertex_border=False, n_graphs_per_line=max(len(shape_list),5))
+                    vertex_border=False, n_graphs_per_line=max(len(shape_list),5),**kwargs)
 
 
-def draw_seq_rea(sequence, react_list, stru=None):
+def draw_seq_rea(sequence, react_list, stru=None, **kwargs):
     ''' given sequence, reactivuty and maybe a structure: draw graph row showing reactivity '''
     if stru != None:
         brack = stru
@@ -40,7 +56,7 @@ def draw_seq_rea(sequence, react_list, stru=None):
         brack = rna_tools.shape(sequence)[0][0]
     graph = ss.eden_rna.sequence_dotbracket_to_graph(sequence,brack)
     graph.graph['structure']= brack
-    draw3(graph, react_list)
+    draw3(graph, react_list,**kwargs)
 
 
 def reactivitiesBoxplot(cross_predictions_list, data, keys, fig_title, xlabels, label_title, nr=5, nc=3):     
