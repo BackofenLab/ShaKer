@@ -31,7 +31,7 @@ def draw_print(seq, shape, file_name= 'lol.svg',stru=None):
     else:
         brack = rnafold.fold(seq)
 
-    graph = ss.eden_rna.sequence_dotbracket_to_graph(seq,brack)
+    graph = util.sequence_dotbracket_to_graph(seq,brack)
     graph.graph['structure']= brack
     graph = annotate(graph.copy(), shape)
 
