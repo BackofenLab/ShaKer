@@ -1,4 +1,5 @@
 import ShaKer.rna_tools
+import ShaKer.rna_tools.util as util
 import ShaKer.simushape as ss
 import numpy as np
 from graphlearn01.utils import draw
@@ -13,7 +14,7 @@ def getgenedict():
 
 def annotate(g, shap):
     """ sets the col argument in the nodes of g, accorgin to shape data shap"""
-    n = g.nodes()
+    n = list(g.nodes())
     n.sort()
     cm= plt.get_cmap("viridis")
     for e, i in zip(n, shap):
@@ -54,7 +55,7 @@ def draw_seq_rea(sequence, react_list, stru=None, **kwargs):
     else:
         print "FIXME, i should use rnafold here"
         brack = rna_tools.shape(sequence)[0][0]
-    graph = ss.eden_rna.sequence_dotbracket_to_graph(sequence,brack)
+    graph = util.sequence_dotbracket_to_graph(sequence,brack)
     graph.graph['structure']= brack
     draw3(graph, react_list,**kwargs)
 
