@@ -25,7 +25,7 @@ def make_forestregressor():
 
 def make_xgbreg():
     return xgboost.XGBRegressor(
-                    **{'reg_alpha': 0.81547748872761927, 'learning_rate': 0.03, 'max_delta_step': 1, 'min_child_weight': 3, 'n_estimators': 65, 'reg_lambda': 0.93307324674007364, 'max_depth': 14, 'gamma': 0, 'booster': 'gbtree'}
+            **{'reg_alpha': 0.81547748872761927, 'learning_rate': 0.03, 'max_delta_step': 1, 'min_child_weight': 3, 'n_estimators': 65, 'reg_lambda': 0.93307324674007364, 'max_depth': 14, 'gamma': 0, 'booster': 'gbtree'}
                 )
 
 def crosspredict_nfold(data, keys, seq_to_db_function=rnasubopt, n_splits=3, model=make_xgbreg()):

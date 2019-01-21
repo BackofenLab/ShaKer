@@ -16,4 +16,6 @@ def fold(sequence,react = None, return_dotplot= False):
     if return_dotplot:
         cmd+= " -p"
     res = shexec(cmd)[2]
+    #if react==None and return_dotplot==False:
+    #    with open('.rnash'
     return res[res.find("\n")+1: res.find(" ")]

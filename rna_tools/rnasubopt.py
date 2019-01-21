@@ -9,7 +9,7 @@ def rnasubopt(sequence, return_energy=False):
         #print "echo " + "%s" % sequence + " | RNAsubopt -p 60 --maxBPspan=150"
 
         d={}
-        if len(sequence) > 300:
+        if len(sequence) > 100:
             if os.path.isfile(".rnasubopt_cache"):
                 d = util.loadfile(".rnasubopt_cache")
                 if sequence in d:
@@ -20,7 +20,7 @@ def rnasubopt(sequence, return_energy=False):
         energy = re.findall(r"[-+]?[0-9]*\.?[0-9]+", out)
         shape = [a.strip() for a in re.findall(r'\n[.()]+', out)]
 
-        if len(sequence) > 300:
+        if len(sequence) > 100:
             d[sequence]= (shape, energy)
             util.dumpfile(d, ".rnasubopt_cache")
 
