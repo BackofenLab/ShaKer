@@ -4,10 +4,12 @@ from collections import defaultdict
 import networkx as nx
 
 import dill
+import json
 
 loadfile = lambda filename: dill.load(open(filename, "r"))
 dumpfile = lambda thing, filename: dill.dump(thing, open(filename, "w"))
-
+jdumpfile = lambda thing, filename:  open(filename,'w').write(json.dumps(thing))
+jloadfile = lambda filename:  json.loads(open(filename,'r').read())
 
 def shexec(cmd):
     '''
