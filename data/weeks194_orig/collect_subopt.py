@@ -21,12 +21,25 @@ path = '/home/mautner/JOBZ/asd'
 
 
 res = {}
-for i,e in enumerate(k[:5]):
+for i,e in enumerate(k):
+
     f = "/5297087.o_%d" % (i+1)
     with open(path+f,"r") as fi:
-        res[data[e][1]]= eval(fi.read())
+        s= fi.read()
+        if len(s) > 3:
+            res[data[e][1]]= eval(s)
+        else:
+            #print ("THIS IS FUCKED:%s, %i" % (e,i))
+            f = "/5300595.o_%d" % (i+1)
+            with open(path+f,"r") as fi2:
+                s= fi2.read()
+                if len(s)> 3:
+                    res[data[e][1]]= eval(s)
+                else:
+                    print ("THIS IS FUCKED:%s, %i" % (e,i))
 
 util.jdumpfile(res,'.subopt_cache') 
+
 
 
 
