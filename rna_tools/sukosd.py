@@ -83,17 +83,26 @@ def generateValue(n,m,o):
 def db_to_suko(db):
 	#encoding looks like this [0, 20, 19, 18, 17, 16, 15, 14, 13, 0, 0, 0, 9, 8, 7, 6, 5, 4, 3, 2]
         result = []
+
         stack = []
+        stack2=[]
         for i,e in enumerate(db):
             if e == '.':
                 result.append(0)
             if e == '(':
                 result.append(-1)
                 stack.append(i)
+            if e == '[':
+                result.append(-1)
+                stack2.append(i)
             if e == ')':
                 otherid = stack.pop()
                 result[otherid] = i+1
                 result.append(otherid+1)
+            if e == ']':
+                otherid = stack2.pop()
+                result[otherid] = i + 1
+                result.append(otherid + 1)
         return result
 	
 

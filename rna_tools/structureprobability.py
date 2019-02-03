@@ -46,7 +46,7 @@ def probability(structure,seq, react=None):
 
 
 def probabilities_of_structures(sequence, structure_list, react=None):
-    """calculate probabilities of structures for a sequence
+    """calculate probabilities of structures for a sequence , the readct option is never used because it distorts the ens energies
     returns [(dotbracket,probability),..]
     """
     ensemble_energy = get_ens_energy(sequence, react = react)
