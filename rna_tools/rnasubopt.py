@@ -5,7 +5,7 @@ import re
 
 cachefile = '.subopt_cache'
 
-def rnasubopt(sequence, return_energy=False):
+def rnasubopt(sequence, return_energy=False, samples=60):
         """call rnasubopt, return (dotbracket, energy)"""
         #print "echo " + "%s" % sequence + " | RNAsubopt -p 60 --maxBPspan=150"
 
@@ -26,7 +26,7 @@ def rnasubopt(sequence, return_energy=False):
                     
             else:
                 util.jdumpfile({},cachefile)
-        retcode, err, out = util.shexec("echo " + "%s" % sequence + " | RNAsubopt -p 60 --maxBPspan=150")
+        retcode, err, out = util.shexec("echo " + "%s" % sequence + " | RNAsubopt -p %d --maxBPspan=150" % samples)
         energy = re.findall(r"[-+]?[0-9]*\.?[0-9]+", out)
         shape = [a.strip() for a in re.findall(r'\n[.()]+', out)]
 

@@ -15,28 +15,29 @@ def rnaplfold(sequence, react=None):
 
 
 
-def call_vienna_plfold(sequence, react=None, W=200, L=150):
+def call_vienna_plfold(sequence, react=None, W=200, L=150,  u=1, seq_name=None):
     '''Runs Vienna RNAfold with partition function for all sequences inside input fasta file
     Input: sequence as string of nucelutides
            seq_name as string to be used for intermediate and output file names
            :rtype: object
     '''
-    seq_name='%d%s' % (os.getpid() ,next(tempfile._get_candidate_names()))# i hope this is uniquye enough..
+    if seq_name==None:
+        seq_name='%d%s' % (os.getpid() ,next(tempfile._get_candidate_names()))# i hope this is uniquye enough..
     dp_file_name = "{}_dp.ps".format(seq_name)
     unp_file_name = "{}_lunp".format(seq_name)
     if os.path.isfile(dp_file_name): os.remove(dp_file_name) 
     if os.path.isfile(unp_file_name): os.remove(unp_file_name)
 
     if type(react) == type(None):
-        RNAPLFOLD = 'RNAplfold -W {} -L {} -u 1'.format(W, L)  # -u 1 for unpaired probablitiy
+        RNAPLFOLD = 'RNAplfold -W {} -L {} -u {}'.format(W, L,u)  # -u 1 for unpaired probablitiy
     else:
         assert len(sequence) == len(react), "len seq and len react are not the same:seq,rea: %d == %d" %(len(sequence),len(react))
         shapfile = tempfile._get_default_tempdir() + '/' + next(tempfile._get_candidate_names( )) + "shap.tmp"
 
         rna_io.write_shape(shapfile, react)
-        RNAPLFOLD = 'RNAplfold -W {} -L {} -u 1 --shape {} --shapeMethod="D"'.format(W, L, shapfile)  # -u 1 unpaired proba
+        RNAPLFOLD = 'RNAplfold -W {} -L {} -u {} --shape {} --shapeMethod="D"'.format(W, L,u, shapfile)  # -u 1 unpaired proba
     cmd = ('echo  ">%s\n%s\n" | ' % (seq_name, sequence))
-    cmd += RNAPLFOLD
+    cmd += RNAPLFOLD 
 
     ret, error, out =  shexec(cmd)
     if ret != 0:
