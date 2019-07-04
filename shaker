@@ -1,0 +1,22 @@
+#!/usr/bin/fish 
+
+if test (count $argv) -eq 4 -a $argv[1]="makemodel"
+    python -c '''import Shaker.rna_tools.rna_io as r; import Shaker.simushape as s;
+print "zomg"
+    '''
+
+else if test (count $argv) -eq 4
+    echo "4 argv"
+else
+    echo  '''
+    I am displaying this help-message becuase your parameters are bad
+
+    USAGE:
+    1. train a model:
+    shaker  makemodel react-file dbn-file output-model-file
+
+    2. use a model:
+    shaker predict model sequence
+    '''
+
+end 
