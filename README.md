@@ -17,7 +17,7 @@ print (sim.predict(model,"AAAAAAGGGGCCCCCCCGGGGGUUUUUU"))
 
 ```
 
-Or type 'shaker' in your commandline and look at the instructions. 
+To train a simple model you can also type 'shaker' in your commandline and look at the instructions. 
 
 
 ### Installation
@@ -41,3 +41,7 @@ pip install shaker-rna
 ```fish
 www.chem.unc.edu/rna/data-files/mustoe_2018_DATA_SOFTWARE.zip 
 ```
+
+### Notebooks 
+
+Don't bother looking at them.
