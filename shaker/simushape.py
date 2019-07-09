@@ -180,7 +180,8 @@ def main():
     elif  sys.argv[1]  == "predict" and len(sys.argv)==4:
 	with open(sys.argv[2], 'rb') as file:
 	    model = pickle.load(file)
-	print (predict(model,sys.argv[3]))
+	res = predict(model,sys.argv[3])
+        print rio.format_shape("result", res)
     else:
         print helpstr
 

@@ -104,7 +104,7 @@ setup(
     description='RNA SHAPE (or other structure prediction protocol) prediction via graph kernel',
     #long_description='SHAPE is a structure probing protocol for RNA. It outputs the probability that a nucleotide is accessible.',
     install_requires=[
-        'xgboost', 'seaborn','tabulate', 'numpy','scipy' 
+        'xgboost', 'seaborn','tabulate', 'numpy','scipy', 'toolz' 
     ],
     entry_points = { 'console_scripts': ['shaker=shaker.simushape:main'] },
     cmdclass={'sdist': sdist, 'install': install}
