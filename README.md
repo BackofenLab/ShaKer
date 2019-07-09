@@ -5,8 +5,8 @@
 
 ```python
 
-import ShaKer.rna_tools.rna_io as rio
-import ShaKer.simushape as sim
+import shaker.rna_tools.rna_io as rio
+import shaker.simushape as sim
 
 #  Train a model 
 data = rio.get_all_data("data/RNA16.react","data/RNA16.dbn") 
@@ -17,29 +17,31 @@ print (sim.predict(model,"AAAAAAGGGGCCCCCCCGGGGGUUUUUU"))
 
 ```
 
+To train a simple model you can also type 'shaker' in your commandline and look at the instructions. 
+
+
 ### Installation
 
 ```fish
 # get vienna RNA binaries via conda or their ppa:
+# https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh
 conda config --add channels defaults
 conda config --add channels bioconda
 conda config --add channels conda-forge
 conda install viennarna
 
 # python dependencies:
-pip install graphlearn xgboost seaborn tabulate
+pip install xgboost seaborn tabulate toolz
 pip install git+https://github.com/smautner/EDeN.git --user 
-
-# clone shaker and put it in your python path:
-git clone https://github.com/smautner/ShaKer 
-set -x PYTHONPATH .  # (this is the fish shell command to set a variable)
-# or directly:
-git clone https://github.com/smautner/ShaKer ~/.local/lib/python2.7/site-packages/ShaKer
+pip install shaker-rna
 ```
 
-#### To run the notebooks you will also need:
 
+### Mustoe data set
 ```fish
-# mustoe data set
 www.chem.unc.edu/rna/data-files/mustoe_2018_DATA_SOFTWARE.zip 
 ```
+
+### Notebooks 
+
+Don't bother looking at them.

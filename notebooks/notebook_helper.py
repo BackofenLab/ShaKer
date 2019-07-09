@@ -1,13 +1,13 @@
-import ShaKer.rna_tools
-import ShaKer.rna_tools.util as util
-import ShaKer.simushape as ss
+import shaker.rna_tools
+import shaker.rna_tools.util as util
+import shaker.simushape as ss
 import numpy as np
 from graphlearn01.utils import draw
 import matplotlib.pyplot as plt
 import pylab as plt
 import matplotlib.colors as colors
-import ShaKer.rna_tools.rnafold as rnafold
-import ShaKer.data.weeks194_orig.remove_genes as d
+import shaker.rna_tools.rnafold as rnafold
+import shaker.data.weeks194_orig.remove_genes as d
 def getgenedict():
     return d.read_genes()
 
