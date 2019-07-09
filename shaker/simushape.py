@@ -153,12 +153,25 @@ def predict(model, sequence,seq_to_db_function= rnasubopt):
 
 
 def main():
-    print "lets see what we can do"
     import sys
     import shaker.rna_tools.rna_io as rio
     import pickle
+    
+    helpstr =  '''
+    I am displaying this help-message becuase your parameters are bad
 
-    if  sys.argv[1]  == "makemodel" and len(sys.argv==5):
+    USAGE:
+    1. train a model:
+    python shaker.py makemodel react-file dbn-file output-model-file
+
+    2. use a model:
+    python shaker.py predict model sequence
+    '''
+
+
+    if len(sys.argv) < 3:
+        print helpstr
+    elif  sys.argv[1]  == "makemodel" and len(sys.argv)==5:
 	data = rio.get_all_data(sys.argv[2],sys.argv[3])
 	model  = make_model(data,data.keys())
 	with open(sys.argv[4], 'wb') as file:
@@ -169,16 +182,7 @@ def main():
 	    model = pickle.load(file)
 	print (predict(model,sys.argv[3]))
     else:
-	print '''
-	I am displaying this help-message becuase your parameters are bad
-
-	USAGE:
-	1. train a model:
-	python shaker.py makemodel react-file dbn-file output-model-file
-
-	2. use a model:
-	python shaker.py predict model sequence
-	'''
+        print helpstr
 
 def test():
         import rna_tools.rna_io as rio
