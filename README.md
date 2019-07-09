@@ -17,11 +17,13 @@ print (sim.predict(model,"AAAAAAGGGGCCCCCCCGGGGGUUUUUU"))
 
 ```
 
+
+
 ### Installation
 
 ```fish
-wget https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh
 # get vienna RNA binaries via conda or their ppa:
+# https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh
 conda config --add channels defaults
 conda config --add channels bioconda
 conda config --add channels conda-forge
@@ -34,7 +36,7 @@ pip install shaker-rna
 ```
 
 
-### mustoe data set
+### Mustoe data set
 ```fish
 www.chem.unc.edu/rna/data-files/mustoe_2018_DATA_SOFTWARE.zip 
 ```
