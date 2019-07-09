@@ -17,6 +17,7 @@ print (sim.predict(model,"AAAAAAGGGGCCCCCCCGGGGGUUUUUU"))
 
 ```
 
+Or type 'shaker' in your commandline and look at the instructions. 
 
 
 ### Installation
