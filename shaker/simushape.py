@@ -162,10 +162,10 @@ def main():
 
     USAGE:
     1. train a model:
-    python shaker.py makemodel react-file dbn-file output-model-file
+    shaker makemodel react-file dbn-file output-model-file
 
     2. use a model:
-    python shaker.py predict model sequence
+    shaker predict model-file sequence
     '''
 
 
