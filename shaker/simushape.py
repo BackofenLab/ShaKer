@@ -155,7 +155,7 @@ def predict(model, sequence,seq_to_db_function= rnasubopt):
 def main():
     print "lets see what we can do"
     import sys
-    import ShaKer.rna_tools.rna_io as rio
+    import shaker.rna_tools.rna_io as rio
     import pickle
 
     if  sys.argv[1]  == "makemodel" and len(sys.argv==5):
