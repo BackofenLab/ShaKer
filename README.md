@@ -40,6 +40,8 @@ pip install shaker-rna
 ### Mustoe data set
 ```fish
 www.chem.unc.edu/rna/data-files/mustoe_2018_DATA_SOFTWARE.zip 
+
+We added this data in shaker readable format unter /data/weeks194_orig/
 ```
 
 ### Notebooks 
