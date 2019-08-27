@@ -47,3 +47,8 @@ We added this data in shaker readable format unter /data/weeks194_orig/
 ### Notebooks 
 
 Don't bother looking at them.
+
+
+### Python3 
+
+YES, but pip and backofenlab/shaker are still on python2.

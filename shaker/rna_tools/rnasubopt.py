@@ -1,4 +1,4 @@
-import util
+from . import util
 import os
 import re
 
@@ -19,7 +19,7 @@ def rnasubopt(sequence, return_energy=False, samples=60):
                     if "(" in d[sequence][0] and return_energy ==False:
                         return d[sequence]
                     if "(" in d[sequence][0] and return_energy:
-                        print "continuing would yield a problem"
+                        print("continuing would yield a problem")
                         exit()
                         
                     return d[sequence] if return_energy else d[sequence][0]

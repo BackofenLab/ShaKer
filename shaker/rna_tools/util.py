@@ -19,7 +19,7 @@ def shexec(cmd):
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     output, stderr = process.communicate()
     retcode = process.poll()
-    return (retcode, stderr, output)
+    return (retcode, stderr.decode('utf-8'), output.decode('utf-8'))
 
 def sequence_dotbracket_to_graph(seq_info=None, seq_struct=None):
     """Given a sequence and the dotbracket sequence make a graph.
