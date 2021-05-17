@@ -1,15 +1,15 @@
 import numpy as np
 from scipy.sparse import vstack
 import eden
-import rna_tools.util as util
+import shaker.rna_tools.util as util
 from eden import graph as eg
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import normalize
 import xgboost
 from scipy.stats import uniform as uni
-from rna_tools.rnasubopt import  rnasubopt
+from shaker.rna_tools.rnasubopt import  rnasubopt
 
-from rna_tools.structureprobability import probabilities_of_structures
+from shaker.rna_tools.structureprobability import probabilities_of_structures
 
 
 from sklearn.model_selection import KFold
