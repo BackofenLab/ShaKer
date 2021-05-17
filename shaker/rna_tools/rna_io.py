@@ -9,10 +9,10 @@ def read_dbn(path):
         for e in text:
             a_thing = [thing for thing in e.split('\n') if len(thing) > 1]
             if len(a_thing)!=3:
-                print "ERRER", a_thing ,e
+                print("ERRER", a_thing ,e)
                 return
             if len(a_thing[1])!=len(a_thing[2]):
-                print "ERRER", a_thing ,e
+                print("ERRER", a_thing ,e)
                 return
             res.append(a_thing)
     return res
@@ -27,7 +27,7 @@ def read_fasta(path):
         for e in text:
             a_thing = [thing for thing in e.split('\n') if len(thing) > 1]
             if len(a_thing)!=2:
-                print "ERRER", a_thing ,e
+                print("ERRER", a_thing ,e)
                 return
             res.append(a_thing)
     return res
@@ -62,15 +62,18 @@ def combine_dbn_react(dbn,react):
         if len(re) == len(seq) == len(brack):
             res[name]= (re,seq,brack)
         else:
-            print "data for '%s' is corrupted, ignoring..." % name
+            print("data for '%s' is corrupted, ignoring..." % name)
     return res
 
 
 def get_all_data(react, dbn):
     '''takes paths to .react and .dbn  returns {seqname:[react, sequence, dotbracketstring]}'''
-    dbn = read_dbn(dbn)
-    react = read_react(react)
-    return combine_dbn_react(dbn,react)
+    try:
+        dbn = read_dbn(dbn)
+        react = read_react(react)
+        return combine_dbn_react(dbn,react)
+    except:
+        print ("there is something wrong with the .react or .dbn file, either they are unreadable or not combinable")
 
 
 def format_shape(name,data, noheader=False):
@@ -90,7 +93,7 @@ def write_shape(fname,react):
 def dump_shape(result, fname):
     '''writes many .react files'''
     with open(fname,'w') as f:
-        for k,v in result.items():
+        for k,v in list(result.items()):
             f.write(format_shape(k, v))
 
 def dump_dbn(name_seq_db_list, fname):

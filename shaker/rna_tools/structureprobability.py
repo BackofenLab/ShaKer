@@ -1,5 +1,5 @@
-import rna_io
-from util import shexec
+from . import rna_io
+from .util import shexec
 import re
 import math
 
@@ -36,7 +36,7 @@ def energy_to_proba(ensemble,other):
         #res = math.exp(-other/RT) / math.exp(-ensemble/RT)
         res = math.exp((-other+ensemble)/RT)
     except:
-        print "energy to proba failed: other:%.100f ens: %.100f" % (other, ensemble)
+        print("energy to proba failed: other:%.100f ens: %.100f" % (other, ensemble))
 
     return res
 
@@ -50,7 +50,7 @@ def probabilities_of_structures(sequence, structure_list, react=None):
     returns [(dotbracket,probability),..]
     """
     ensemble_energy = get_ens_energy(sequence, react = react)
-    energies = map(lambda x: get_stru_energy(x, sequence, react = react), structure_list)
-    probabilities = map(lambda x:energy_to_proba(ensemble_energy, x), energies)
+    energies = [get_stru_energy(x, sequence, react = react) for x in structure_list]
+    probabilities = [energy_to_proba(ensemble_energy, x) for x in energies]
     #probabilities = normalize(probabilities, norm='l1').tolist()[0]
     return [(stru,proba) for stru,proba in zip(structure_list,probabilities)]

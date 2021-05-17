@@ -1,15 +1,15 @@
 import numpy as np
 from scipy.sparse import vstack
 import eden
-import rna_tools.util as util
+import shaker.rna_tools.util as util
 from eden import graph as eg
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import normalize
 import xgboost
 from scipy.stats import uniform as uni
-from rna_tools.rnasubopt import  rnasubopt
+from shaker.rna_tools.rnasubopt import  rnasubopt
 
-from rna_tools.structureprobability import probabilities_of_structures
+from shaker.rna_tools.structureprobability import probabilities_of_structures
 
 
 from sklearn.model_selection import KFold
@@ -35,7 +35,7 @@ def crosspredict_nfold(data, keys, seq_to_db_function=rnasubopt, n_splits=3, mod
     train on n-1 keys, predict on the last,
     yield result for each
     '''
-    print "crosspredict:",
+    print("crosspredict:", end=" ")
     res = []
     kf = KFold(n_splits=n_splits,shuffle=False)
     for train_n, test_n in kf.split(keys):
@@ -43,8 +43,8 @@ def crosspredict_nfold(data, keys, seq_to_db_function=rnasubopt, n_splits=3, mod
         mod = make_model(data,train_keys, model)
         for i in test_n:
             res.append( predict(mod, data[keys[i]][1], seq_to_db_function=seq_to_db_function))
-            print ".",
-    print "\n"
+            print(".", end=" ")
+    print("\n", end=" ")
     return res
 
 
@@ -56,11 +56,11 @@ def crosspredict(data, keys, seq_to_db_function=rnasubopt):
     train on n-1 keys, predict on the last,
     yield result for each
     '''
-    print "crosspredict:",
+    print("crosspredict:", end=" ")
     for key in keys:
         trainkeys = remove(keys, key)
         mod = make_model(data,trainkeys, model= make_forestregressor())
-        print ".",
+        print(".", end=" ")
         yield predict(mod, data[key][1], seq_to_db_function=seq_to_db_function)
 
 
@@ -170,20 +170,20 @@ def main():
 
 
     if len(sys.argv) < 3:
-        print helpstr
+        print(helpstr) 
     elif  sys.argv[1]  == "makemodel" and len(sys.argv)==5:
-	data = rio.get_all_data(sys.argv[2],sys.argv[3])
-	model  = make_model(data,data.keys())
-	with open(sys.argv[4], 'wb') as file:
-	    pickle.dump(model, file)
+        data = rio.get_all_data(sys.argv[2],sys.argv[3])
+        model  = make_model(data,data.keys())
+        with open(sys.argv[4], 'wb') as file:
+            pickle.dump(model, file)
 
     elif  sys.argv[1]  == "predict" and len(sys.argv)==4:
-	with open(sys.argv[2], 'rb') as file:
-	    model = pickle.load(file)
-	res = predict(model,sys.argv[3])
-        print rio.format_shape("result", res)
+        with open(sys.argv[2], 'rb') as file:
+            model = pickle.load(file)
+        res = predict(model,sys.argv[3])
+        print (rio.format_shape("result", res))
     else:
-        print helpstr
+        print(helpstr) 
 
 def test():
         import rna_tools.rna_io as rio

@@ -25,14 +25,11 @@ To train a simple model you can also type 'shaker' in your commandline and look 
 ```fish
 # get vienna RNA binaries via conda or their ppa:
 # https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh
-conda config --add channels defaults
-conda config --add channels bioconda
-conda config --add channels conda-forge
-conda install viennarna
+#conda config --add channels defaults
+#conda config --add channels bioconda
+#conda config --add channels conda-forge
 
-# python dependencies:
-pip install xgboost seaborn tabulate toolz
-pip install git+https://github.com/smautner/EDeN.git --user 
+conda install viennarna
 pip install shaker-rna
 ```
 
@@ -46,4 +43,6 @@ We added this data in shaker readable format unter /data/weeks194_orig/
 
 ### Notebooks 
 
-Don't bother looking at them.
+outdated
+
+
